@@ -1,0 +1,25 @@
+//
+$height_input: 20px
+$padding_input: 5px
+form
+  input[type=text]
+    font-size: $height_input
+    padding: $padding_input
+
+    &.field-error
+      border: solid 1px $red
+      &:focus
+        outline-color: $red
+
+  ul
+    float: right
+
+    li.field-error
+      list-style: none
+      color: $red
+      line-height: $height_input
+      padding: $padding_input
+
+
+  .buttons
+    margin: 20px 0

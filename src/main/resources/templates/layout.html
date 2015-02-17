@@ -1,0 +1,42 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+  <title>Layout</title>
+  <meta content='width=1280' id='vp' name='viewport'/>
+  <meta charset='utf-8'/>
+  <link href="/css/application.css" th:href="@{/css/application.css}" media="screen" rel="stylesheet"/>
+</head>
+<body>
+<div class="l-header">
+  <div class="mod-header">
+    <h1 class="title">Selfregistration</h1>
+
+    <div class="meta">
+      <div class="name" sec:authentication="name">Bob</div>
+    </div>
+  </div>
+</div>
+<div class="l-main">
+  <div class="mod-flash">
+    <div class="flash-notice" th:classappend="${#vars['flash.notice'] == null} ? 'hidden'">
+      <a class="close" href="#">X</a>
+      <span th:text="${#vars['flash.notice']}">flash text</span>
+    </div>
+  </div>
+  <div layout:fragment="content">
+    Hier staat niks
+  </div>
+</div>
+<div class="mod-footer">
+  <ul data-reactid=".0.2.0">
+    <li><a href="http://www.surfnet.nl/en" target="_blank">SURFnet</a></li>
+    <li><a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%28EN%29"
+           target="_blank">Terms of Service</a></li>
+    <li><a href="mailto:help@surfconext.nl">help@surfconext.nl</a></li>
+  </ul>
+</div>
+</body>
+</html>
