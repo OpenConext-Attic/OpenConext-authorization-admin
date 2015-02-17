@@ -3,6 +3,8 @@ Admin client for the Oauth2 server for the OpenConext platform.
 
 ## Development
 
+Setup the database controlled by [OpenConext-authorization-server](https://github.com/OpenConext/OpenConext-authorization-server) as described in the [README](https://github.com/OpenConext/OpenConext-authorization-server/blob/master/README.md).
+
 To run locally:
 
 `mvn spring-boot:run`
