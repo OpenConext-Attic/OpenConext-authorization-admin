@@ -7,7 +7,7 @@ Setup the database controlled by [OpenConext-authorization-server](https://githu
 
 To run locally:
 
-`mvn spring-boot:run`
+`mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=dev"`
 
 Or use the shortcut:
 
