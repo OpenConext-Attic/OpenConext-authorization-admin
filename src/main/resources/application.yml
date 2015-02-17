@@ -1,3 +1,7 @@
+# Run on non default port so it can run together with the authorization-server out-of-the-box.
+server:
+  port: 8081
+
 # see for all options: http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
   datasource:
