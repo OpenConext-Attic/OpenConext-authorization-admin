@@ -1,3 +1,4 @@
+.mod-createclient .createclient-container,
 .box {
   background: #fff;
   border-radius: 5px;
@@ -154,7 +155,7 @@ a {
   a:hover {
     text-decoration: underline; }
 
-.mod-error h1 {
+.mod-error h1, .mod-createclient h1 {
   font-size: 30px;
   line-height: 40px; }
 
@@ -245,6 +246,12 @@ form .buttons {
 
 .mod-error h1 {
   margin-bottom: 20px; }
+
+.mod-createclient h1 {
+  margin-bottom: 20px; }
+.mod-createclient .createclient-container {
+  padding: 40px;
+  position: relative; }
 
 .c-button {
   background: #4DB3CF;
