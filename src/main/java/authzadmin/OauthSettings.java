@@ -1,9 +1,11 @@
 package authzadmin;
 
-import org.springframework.security.oauth2.provider.ClientDetails;
-
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class OauthSettings {
 
@@ -18,6 +20,10 @@ public class OauthSettings {
   @NotNull
   @Size(min = 1)
   private String callbackUrl;
+
+  @NotNull
+  @Valid
+  private List<Scope> scopes = Arrays.asList(new Scope("test"), new Scope("aap"));//new ArrayList<>();
 
   public String getConsumerKey() {
     return consumerKey;
@@ -54,6 +60,14 @@ public class OauthSettings {
     this.secret = secret;
     this.consumerKey = consumerKey;
     this.callbackUrl = callbackUrl;
+  }
+
+  public List<Scope> getScopes() {
+    return scopes;
+  }
+
+  public void setScopes(List<Scope> scopes) {
+    this.scopes = scopes;
   }
 
   @Override
