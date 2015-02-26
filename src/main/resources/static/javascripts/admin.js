@@ -27,4 +27,9 @@ $(function() {
   $(".flash-notice a").on("click", function() {
     $(".flash-notice").toggleClass("hidden");
   });
+
+  $("form.delete-client").on("submit", function(e) {
+    var clientId = $(this).data("client");
+    return confirm("Are you sure you want to delete client: " + clientId);
+  });
 });
