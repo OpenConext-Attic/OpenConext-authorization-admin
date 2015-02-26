@@ -1,4 +1,4 @@
-.mod-createclient .createclient-container,
+.mod-createclient .createclient-container, .mod-clients table,
 .box {
   background: #fff;
   border-radius: 5px;
@@ -87,6 +87,83 @@ hr {
 input, select {
   vertical-align: middle; }
 
+.mod-clients table {
+  width: 100%; }
+.mod-clients th, .mod-clients td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  line-height: 20px;
+  padding: 20px; }
+  .mod-clients th:first-child, .mod-clients td:first-child {
+    padding-left: 30px; }
+  .mod-clients th:last-child, .mod-clients td:last-child {
+    padding-right: 30px; }
+.mod-clients tbody tr:last-child td,
+.mod-clients tbody tr:last-child th {
+  border: 0; }
+.mod-clients th {
+  padding: 15px 20px; }
+  .mod-clients th a {
+    color: inherit;
+    text-decoration: none; }
+    .mod-clients th a:hover {
+      color: #4DB3CF;
+      text-decoration: underline; }
+      .mod-clients th a:hover .fa {
+        color: #4DB3CF; }
+.mod-clients .fa {
+  color: #a2a2a2;
+  padding: 0 15px; }
+  .mod-clients .fa.fa-sort-asc, .mod-clients .fa.fa-sort-desc {
+    color: #4DB3CF; }
+.mod-clients .date,
+.mod-clients .number,
+.mod-clients .right {
+  text-align: right; }
+.mod-clients .yes {
+  color: #95b926; }
+.mod-clients .no {
+  color: #dd3939; }
+.mod-clients .percent_5 {
+  width: 5%; }
+.mod-clients .percent_10 {
+  width: 10%; }
+.mod-clients .percent_15 {
+  width: 15%; }
+.mod-clients .percent_20 {
+  width: 20%; }
+.mod-clients .percent_25 {
+  width: 25%; }
+.mod-clients .percent_30 {
+  width: 30%; }
+.mod-clients .percent_35 {
+  width: 35%; }
+.mod-clients .percent_40 {
+  width: 40%; }
+.mod-clients .percent_45 {
+  width: 45%; }
+.mod-clients .percent_50 {
+  width: 50%; }
+.mod-clients .percent_55 {
+  width: 55%; }
+.mod-clients .percent_60 {
+  width: 60%; }
+.mod-clients .percent_65 {
+  width: 65%; }
+.mod-clients .percent_70 {
+  width: 70%; }
+.mod-clients .percent_75 {
+  width: 75%; }
+.mod-clients .percent_80 {
+  width: 80%; }
+.mod-clients .percent_85 {
+  width: 85%; }
+.mod-clients .percent_90 {
+  width: 90%; }
+.mod-clients .percent_95 {
+  width: 95%; }
+.mod-clients .percent_100 {
+  width: 100%; }
+
 .l-main {
   padding: 30px; }
   .l-main:after {
@@ -155,13 +232,19 @@ a {
   a:hover {
     text-decoration: underline; }
 
-.mod-error h1, .mod-createclient h1 {
+.mod-error h1, .mod-createclient h1, .mod-clients h1 {
   font-size: 30px;
   line-height: 40px; }
 
 .mod-header .title {
   font-size: 20px;
   line-height: 30px; }
+
+.mod-clients th {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 25px;
+  margin-bottom: 5px; }
 
 body {
   font-size: 14px;
@@ -215,6 +298,10 @@ form .buttons {
   .mod-header .name {
     float: left;
     line-height: 30px; }
+  .mod-header h1 a {
+    text-decoration: none; }
+  .mod-header h1.hover {
+    text-decoration: none; }
 
 .mod-flash .flash-notice {
   text-align: center;
@@ -269,6 +356,13 @@ form .buttons {
       margin: 0; }
       .mod-createclient .createclient-container .tag a:hover {
         text-decoration: none; }
+
+.mod-clients h1 {
+  margin-bottom: 20px; }
+.mod-clients table {
+  margin-top: 10px; }
+  .mod-clients table td {
+    word-break: break-all; }
 
 .c-button {
   background: #4DB3CF;

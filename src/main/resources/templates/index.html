@@ -8,7 +8,32 @@
 <body>
 <div layout:fragment="content">
   <div class="l-mini">
-    <a id="add-client" href="/create" th:href="@{/create}" th:text="#{index.create}">Add client</a>
+    <a id="add-client" class="c-button" href="/create" th:href="@{/create}" th:text="#{index.create}">Add client</a>
+
+    <div class="mod-clients">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Redirect URIS</th>
+            <th>Scopes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  th:each="client: ${clients}">
+            <td th:text="${client.clientId}">
+              CLIENT_ID
+            </td>
+            <td th:text="${client.registeredRedirectUri}">
+              REDIRECT_URI
+            </td>
+            <td th:text="${client.scope}">
+              SCOPES
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 </body>
