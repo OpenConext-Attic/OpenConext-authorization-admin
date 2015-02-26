@@ -21,9 +21,8 @@ public class OauthSettings {
   @Size(min = 1)
   private String callbackUrl;
 
-  @NotNull
   @Valid
-  private List<Scope> scopes = Arrays.asList(new Scope("test"), new Scope("aap"));//new ArrayList<>();
+  private List<Scope> scopes = new ArrayList<>();
 
   public String getConsumerKey() {
     return consumerKey;

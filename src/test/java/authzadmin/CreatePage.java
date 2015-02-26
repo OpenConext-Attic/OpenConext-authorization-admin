@@ -1,8 +1,17 @@
 package authzadmin;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.function.Consumer;
+
+import static java.lang.String.format;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class CreatePage {
   private final WebDriver webDriver;
@@ -18,7 +27,7 @@ public class CreatePage {
   }
 
   public WebElement elementWithFieldError(String id) {
-    return webDriver.findElement(By.cssSelector(String.format("#%s.field-error", id)));
+    return webDriver.findElement(By.cssSelector(format("#%s.field-error", id)));
   }
 
   public String currentUrl() {
@@ -29,6 +38,15 @@ public class CreatePage {
     webDriver.findElement(By.id("consumerKey")).sendKeys(oauthSettings.getConsumerKey());
     webDriver.findElement(By.id("secret")).sendKeys(oauthSettings.getSecret());
     webDriver.findElement(By.id("callbackUrl")).sendKeys(oauthSettings.getCallbackUrl());
+
+    oauthSettings.getScopes().forEach(scope -> {
+        webDriver.findElement(By.id("scope-name")).sendKeys(scope.getValue() + "\n");
+        new WebDriverWait(webDriver, 5)
+          .until(
+            presenceOfElementLocated(By.cssSelector(format("span[data-value='%s']", scope.getValue())))
+          );
+      }
+    );
     tryCreateClient();
     return this;
   }
