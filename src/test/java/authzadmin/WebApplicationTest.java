@@ -1,8 +1,12 @@
 package authzadmin;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.ConfigFileApplicationContextInitializer;
@@ -13,7 +17,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
@@ -29,14 +36,20 @@ public class WebApplicationTest {
 
   @Value("${local.server.port}")
   private int port;
+
   private String serverUrl;
   private static WebDriver webDriver;
   private Pages pages;
   private OauthSettings oauthSettings;
 
   @BeforeClass
-  public static void beforeClass() {
-    webDriver = new FirefoxDriver();
+  public static void beforeClass() throws IOException {
+    Properties properties = new Properties();
+    properties.load(new FileReader(new File("./target/selenium/display.properties")));
+    String display = properties.getProperty("DISPLAY");
+    FirefoxBinary firefoxBinary = new FirefoxBinary();
+    firefoxBinary.setEnvironmentProperty("DISPLAY", display);
+    webDriver = new FirefoxDriver(firefoxBinary, null);
   }
 
   @AfterClass
