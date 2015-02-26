@@ -54,7 +54,9 @@ public class WebApplicationTest {
 
   @AfterClass
   public static void afterClass() {
-    webDriver.quit();
+    if(webDriver != null) {
+      webDriver.quit();
+    }
   }
 
   @Before
