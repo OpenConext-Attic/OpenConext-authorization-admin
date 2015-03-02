@@ -10,9 +10,27 @@ import java.util.Optional;
 
 public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-  public static final String UID_ATTRIBUTE_NAME = "uid";
+  public static class ShibbolethPrincipal {
+    public final String uid;
+    public final String displayName;
 
-  private static final Logger LOG = LoggerFactory.getLogger(ShibbolethPreAuthenticatedProcessingFilter.class);
+    public ShibbolethPrincipal(String uid, String displayName) {
+      this.uid = uid;
+      this.displayName = displayName;
+    }
+
+    @Override
+    public String toString() {
+      return "ShibbolethPrincipal{" +
+        "uid='" + uid + '\'' +
+        ", displayName='" + displayName + '\'' +
+        '}';
+    }
+  }
+
+  public static final String UID_HEADER_NAME = "uid";
+  public static final String DISPLAY_NAME_HEADER_NAME = "displayname";
+
 
   public ShibbolethPreAuthenticatedProcessingFilter(AuthenticationManager authenticationManager) {
     super();
@@ -21,14 +39,10 @@ public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthe
 
   @Override
   protected Object getPreAuthenticatedPrincipal(final HttpServletRequest request) {
-    final Optional<String> uid = Optional.ofNullable(request.getHeader(UID_ATTRIBUTE_NAME));
-    if (uid.isPresent()) {
-      LOG.info("Found user with uid {}", uid.get());
-      return uid.get();
-    } else {
-      LOG.error("No shibboleth-authenticated user found. This must not happen.");
-      return null;
-    }
+    final Optional<String> uid = Optional.of(request.getHeader(UID_HEADER_NAME));
+    final Optional<String> displayName = Optional.of(request.getHeader(DISPLAY_NAME_HEADER_NAME));
+
+    return new ShibbolethPrincipal(uid.get(), displayName.get());
   }
 
   @Override

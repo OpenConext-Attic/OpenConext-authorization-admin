@@ -1,5 +1,6 @@
 package authzadmin.shibboleth;
 
+import authzadmin.shibboleth.ShibbolethPreAuthenticatedProcessingFilter.ShibbolethPrincipal;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -16,9 +17,11 @@ public class ShibbolethUserDetailService implements AuthenticationUserDetailsSer
   public static class ShibbolethUser implements UserDetails {
 
     private final String uid;
+    private final String displayName;
 
-    public ShibbolethUser(String uid) {
+    public ShibbolethUser(String uid, String displayName) {
       this.uid = uid;
+      this.displayName = displayName;
     }
 
     @Override
@@ -34,6 +37,14 @@ public class ShibbolethUserDetailService implements AuthenticationUserDetailsSer
     @Override
     public String getUsername() {
       return this.uid;
+    }
+
+    public String getUid() {
+      return uid;
+    }
+
+    public String getDisplayName() {
+      return displayName;
     }
 
     @Override
@@ -59,7 +70,7 @@ public class ShibbolethUserDetailService implements AuthenticationUserDetailsSer
 
   @Override
   public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken authentication) throws UsernameNotFoundException {
-    String uid = (String) authentication.getPrincipal();
-    return new ShibbolethUser(uid);
+    ShibbolethPrincipal principal = (ShibbolethPrincipal) authentication.getPrincipal();
+    return new ShibbolethUser(principal.uid, principal.displayName);
   }
 }

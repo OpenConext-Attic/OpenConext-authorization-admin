@@ -59,7 +59,8 @@ public class MockShibbolethFilter extends GenericFilterBean {
   @Override
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
     SetHeader wrapper = new SetHeader((HttpServletRequest) servletRequest);
-    wrapper.setHeader(ShibbolethPreAuthenticatedProcessingFilter.UID_ATTRIBUTE_NAME, "saml2_user");
+    wrapper.setHeader(ShibbolethPreAuthenticatedProcessingFilter.UID_HEADER_NAME, "saml2_user");
+    wrapper.setHeader(ShibbolethPreAuthenticatedProcessingFilter.DISPLAY_NAME_HEADER_NAME, "Ben Vonk");
     filterChain.doFilter(wrapper, servletResponse);
   }
 }
