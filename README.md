@@ -25,3 +25,15 @@ Then run
 Or use the shortcut:
 
     ./watch.sh
+
+## Production
+
+Since only users with any of the roles defined in the property ```allowed_roles``` are allowed to connect to this app
+  we need to query the voot service. The vootservice is registered with resource_id **groups** in the ```OpenConext-authorization-server```
+
+This admin app needs to be registered out-of-band in the OpenConext-authorization-server using the following SQL:
+
+```sql
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri)
+VALUES ('authz-admin', 'groups', 'secret', 'read','authorization_code', 'http://localhost:8081');
+```

@@ -8,9 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ShibbolethUserDetailService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
@@ -18,16 +17,23 @@ public class ShibbolethUserDetailService implements AuthenticationUserDetailsSer
 
     private final String uid;
     private final String displayName;
+    private List<GrantedAuthority> authorities;
 
     public ShibbolethUser(String uid, String displayName) {
       this.uid = uid;
       this.displayName = displayName;
+      this.authorities = new ArrayList<>();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      return Collections.unmodifiableList(Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+      return Collections.unmodifiableList(authorities);
     }
+
+    public void setAuthorities(Collection<Map<String, ?>> authorities) {
+      this.authorities = authorities.stream().map(m -> new SimpleGrantedAuthority((String) m.get("id"))).collect(Collectors.toList());
+    }
+
 
     @Override
     public String getPassword() {

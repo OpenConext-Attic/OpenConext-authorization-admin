@@ -3,8 +3,12 @@ package authzadmin;
 import authzadmin.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
 import authzadmin.shibboleth.ShibbolethUserDetailService;
 import authzadmin.shibboleth.mock.MockShibbolethFilter;
+import authzadmin.voot.VootClient;
+import authzadmin.voot.VootFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +27,9 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(ShibbolethSecurityConfig.class);
 
+  @Value("${allowed_role}")
+  private String allowedRole;
+
   @Bean
   @Profile("dev")
   public FilterRegistrationBean mockShibbolethFilter() {
@@ -38,8 +45,10 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
       addFilterBefore(new ShibbolethPreAuthenticatedProcessingFilter(authenticationManagerBean()),
         AbstractPreAuthenticatedProcessingFilter.class)
       .authorizeRequests()
-      .antMatchers("/css/**").permitAll()
-      .anyRequest().hasAnyRole("USER");
+        .antMatchers("/css/**").permitAll()
+        .antMatchers("/js/**").permitAll()
+        .antMatchers("/error**").permitAll()
+        .anyRequest().permitAll(); //TODO: This is not secure :-)
   }
 
   @Override
