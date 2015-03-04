@@ -2,14 +2,13 @@ package authzadmin.shibboleth;
 
 import authzadmin.shibboleth.ShibbolethPreAuthenticatedProcessingFilter.ShibbolethPrincipal;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Collections;
 
 public class ShibbolethUserDetailService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
@@ -17,23 +16,16 @@ public class ShibbolethUserDetailService implements AuthenticationUserDetailsSer
 
     private final String uid;
     private final String displayName;
-    private List<GrantedAuthority> authorities;
 
     public ShibbolethUser(String uid, String displayName) {
       this.uid = uid;
       this.displayName = displayName;
-      this.authorities = new ArrayList<>();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      return Collections.unmodifiableList(authorities);
+      return Collections.EMPTY_LIST;
     }
-
-    public void setAuthorities(Collection<Map<String, ?>> authorities) {
-      this.authorities = authorities.stream().map(m -> new SimpleGrantedAuthority((String) m.get("id"))).collect(Collectors.toList());
-    }
-
 
     @Override
     public String getPassword() {

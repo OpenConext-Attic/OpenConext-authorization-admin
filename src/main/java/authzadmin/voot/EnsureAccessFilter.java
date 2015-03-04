@@ -1,7 +1,6 @@
 package authzadmin.voot;
 
-import authzadmin.shibboleth.ShibbolethUserDetailService.ShibbolethUser;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -10,10 +9,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 
-public class VootFilter extends GenericFilterBean {
+public class EnsureAccessFilter extends GenericFilterBean {
   private final VootClient vootClient;
+  private final String allowedGroup;
 
-  public VootFilter(VootClient vootClient) {
+  public EnsureAccessFilter(VootClient vootClient, String allowedGroup) {
+    this.allowedGroup = allowedGroup;
     if (vootClient == null) {
       throw new IllegalArgumentException("vootClient cannot be null");
     }
@@ -22,7 +23,10 @@ public class VootFilter extends GenericFilterBean {
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    vootClient.enrichUser((ShibbolethUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-    chain.doFilter(request, response);
+    if(vootClient.hasAccess(allowedGroup)) {
+      chain.doFilter(request, response);
+    } else {
+      throw new AccessDeniedException("no access");
+    }
   }
 }
