@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-  <title th:text="#{error.title}"></title>
+  <title th:text="*{customErrorTitle}?: #{error.title}"></title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -11,8 +11,8 @@
 
     <div class="mod-error">
 
-      <h1 th:text="#{error.title}"></h1>
-      <p th:utext="#{error.subtitle}">
+      <h1 th:text="*{customErrorTitle}?: #{error.title}"></h1>
+      <p th:utext="*{customErrorSubTitle}?: #{error.subtitle}">
 
       </p>
     </div>
