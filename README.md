@@ -35,5 +35,5 @@ This admin app needs to be registered out-of-band in the OpenConext-authorizatio
 
 ```sql
 INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri)
-VALUES ('authz-admin', 'groups', 'secret', 'read','authorization_code', 'http://localhost:8081');
+VALUES ('authz-admin', 'groups', '$2a$10$MUw.vpbP4PMUBXHcZagPBe292hwzPI4qjXi1u8e6ON8PJmCnQ8U0S', 'read','authorization_code', 'http://localhost:8081');
 ```
