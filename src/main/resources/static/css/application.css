@@ -361,8 +361,11 @@ form .buttons {
   margin-bottom: 20px; }
 .mod-clients table {
   margin-top: 10px; }
+  .mod-clients table th {
+    text-align: left; }
   .mod-clients table td {
-    word-break: break-all; }
+    word-break: break-all;
+    text-align: left; }
 
 .c-button {
   background: #4DB3CF;
