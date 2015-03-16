@@ -19,7 +19,7 @@ public class OauthSettingsTest {
   @Before
   public void setUp() throws Exception {
     validator = Validation.buildDefaultValidatorFactory().getValidator();
-    oauthSettings = new OauthSettings("secret", "consumerKey", "callbackUrl");
+    oauthSettings = new OauthSettings("secret", "consumerKey", "http://localhost:8080");
   }
 
   @Test

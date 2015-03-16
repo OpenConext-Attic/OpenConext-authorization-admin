@@ -81,7 +81,6 @@ public class WebApplicationTest {
     page.tryCreateClient();
 
     assertNotNull(page.elementWithFieldError("consumerKey"));
-    assertNotNull(page.elementWithFieldError("secret"));
     assertNotNull(page.elementWithFieldError("callbackUrl"));
   }
 
