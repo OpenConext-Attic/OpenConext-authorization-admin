@@ -1,17 +1,20 @@
 package authzadmin;
 
+import org.hibernate.validator.constraints.URL;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class OauthSettings {
 
   @NotNull
   @Size(min = 1)
-  private String secret;
+  private String secret = UUID.randomUUID().toString();
 
   @NotNull
   @Size(min = 1)
@@ -19,6 +22,7 @@ public class OauthSettings {
 
   @NotNull
   @Size(min = 1)
+  @URL
   private String callbackUrl;
 
   @Valid

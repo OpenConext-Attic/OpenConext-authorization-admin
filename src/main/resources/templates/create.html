@@ -23,15 +23,22 @@
 
             <div>
               <label th:for="scopes" th:text="#{create.form.scopes}"></label>
+              <em class="tip">Press &lt;enter&lt; to add a scope. A client can have multiple scopes.</em>
+
               <div>
                 <ul th:if="${#fields.hasErrors('scopes')}">
-                  <li class="field-error" th:each="err : ${#fields.errors('scopes')}" th:text="${err}" />
+                  <li class="field-error" th:each="err : ${#fields.errors('scopes')}" th:text="${err}"/>
                 </ul>
                 <div>
-                  <span th:each="scope: ${oauthSettings.scopes}" class="tag c-button" th:attr="data-value=${scope.value}"><span th:text="${scope.value}">tst</span><a href="#">x</a></span><input type="text" id="scope-name" class="small"/>
+                  <span th:each="scope: ${oauthSettings.scopes}" class="tag c-button"
+                        th:attr="data-value=${scope.value}">
+                    <span th:text="${scope.value}">tst</span><a href="#">x</a></span>
+                  <input type="text" id="scope-name" class="large"/>
                 </div>
                 <select th:field="*{scopes}" multiple="multiple" class="hidden">
-                  <option th:each="scope: ${oauthSettings.scopes}" th:value="${{scope.value}}" th:text="${scope.value}">foo</option>
+                  <option th:each="scope: ${oauthSettings.scopes}" th:value="${{scope.value}}" th:text="${scope.value}">
+                    foo
+                  </option>
                 </select>
               </div>
             </div>

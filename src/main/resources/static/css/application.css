@@ -343,7 +343,7 @@ form .buttons {
     display: none; }
   .mod-createclient .createclient-container .tag {
     padding: 8px 25px;
-    margin-right: 10px;
+    margin: 0px 10px 5px 0px;
     display: inline-block;
     position: relative; }
     .mod-createclient .createclient-container .tag a {
@@ -386,4 +386,11 @@ input[type=submit].c-button, button.c-button {
   border: none;
   font-size: 100%; }
 
+input.large {
+  width: 100%;
+}
+em.tip {
+  display: block;
+  font-size: smaller;
+}
 /*# sourceMappingURL=application.css.map */

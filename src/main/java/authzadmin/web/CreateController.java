@@ -35,7 +35,7 @@ public class CreateController extends BaseController {
       return "create";
     }
     try {
-      this.transactionTemplate.execute(transactionStatus -> {
+        this.transactionTemplate.execute((transactionStatus) -> {
           clientRegistrationService.addClientDetails(new OauthClientDetails(oauthSettings));
           return null;
         }
