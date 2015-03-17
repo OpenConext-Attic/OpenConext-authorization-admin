@@ -1,11 +1,10 @@
 package authzadmin;
 
+import java.util.stream.Collectors;
+
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class OauthClientDetails extends BaseClientDetails {
 
