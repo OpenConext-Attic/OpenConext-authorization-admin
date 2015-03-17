@@ -30,6 +30,8 @@ public class VootClientConfig {
   @Value("${voot.redirectUri}")
   private String redirectUri;
 
+  @Value("${voot.scopes}")
+  private String spaceDelimitedScopes;
 
   @Bean
   public OAuth2ProtectedResourceDetails voot() {
@@ -40,7 +42,7 @@ public class VootClientConfig {
     details.setAccessTokenUri(accessTokenUri);
     details.setUserAuthorizationUri(userAuthorizationUri);
     details.setUseCurrentUri(false);
-    details.setScope(Arrays.asList("read"));
+    details.setScope(Arrays.asList(spaceDelimitedScopes.split(" ")));
     return details;
   }
 
