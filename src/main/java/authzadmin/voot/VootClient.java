@@ -2,9 +2,9 @@ package authzadmin.voot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-import java.util.List;
 import java.util.Map;
 
 public class VootClient {
@@ -21,8 +21,13 @@ public class VootClient {
   }
 
   public boolean hasAccess(String allowedGroup) {
-    List<Map<String, ?>> groups = vootService.getForObject(vootServiceUrl + "/me/groups", List.class);
-    logger.info("Retrieved groups: {}", groups);
-    return groups.stream().anyMatch(g -> g.get("id").equals(allowedGroup));
+    try {
+      Map<String, ?> group = vootService.getForObject(vootServiceUrl + "/groups/{allowedGroup}", Map.class, allowedGroup);
+      logger.debug("Retrieved group: {}", group);
+      return true;
+    } catch (HttpClientErrorException e) {
+      logger.error(String.format("Unauthorized access. User does not belong to the group %s", allowedGroup), e);
+      return false;
+    }
   }
 }

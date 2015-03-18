@@ -1,3 +1,6 @@
+# Testing
+hs_err_pid*.log
+
 # Eclipse
 .classpath
 .project
