@@ -38,6 +38,7 @@
                   <input type="submit" class="c-button" th:value="#{index.actions.delete}"/>
                 </div>
               </form>
+              <p th:if="${!client.mutable}" th:text="#{index.actions.preconfigured}">Pre-configured</p>
             </td>
           </tr>
         </tbody>

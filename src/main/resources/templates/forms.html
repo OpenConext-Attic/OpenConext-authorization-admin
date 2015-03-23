@@ -7,8 +7,9 @@
 <body>
 <div>
   <form action="#">
-    <div th:fragment="textfield (fieldName)">
+    <div th:fragment="textfield (fieldName, tip)">
       <label th:for="*{__${fieldName}__}" th:text="#{create.form.__${fieldName}__}"></label>
+      <em th:if="${tip != 'na'}" class="tip" th:text="#{create.form.__${tip}__}"></em>
       <div>
         <ul th:if="${#fields.hasErrors('__${fieldName}__')}">
           <li class="field-error" th:each="err : ${#fields.errors('__${fieldName}__')}" th:text="${err}" />
