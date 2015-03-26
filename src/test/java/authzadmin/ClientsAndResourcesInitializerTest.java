@@ -47,7 +47,7 @@ public class ClientsAndResourcesInitializerTest {
 
     subject.onApplicationEvent(mockEvent);
 
-    verify(clientRegistrationService, times(3)).addClientDetails(any(ClientDetails.class));
+    verify(clientRegistrationService, times(4)).addClientDetails(any(ClientDetails.class));
   }
 
   @Test
@@ -59,7 +59,7 @@ public class ClientsAndResourcesInitializerTest {
 
     subject.onApplicationEvent(mockEvent);
 
-    verify(clientRegistrationService, times(2)).addClientDetails(any(ClientDetails.class));
+    verify(clientRegistrationService, times(3)).addClientDetails(any(ClientDetails.class));
     verify(clientRegistrationService, times(1)).updateClientSecret(clientId, "secret");
     verify(clientRegistrationService, times(1)).updateClientDetails(any(ClientDetails.class));
   }

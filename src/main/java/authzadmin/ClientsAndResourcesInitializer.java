@@ -2,11 +2,8 @@ package authzadmin;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +21,7 @@ import com.google.common.collect.ImmutableSet;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigObject;
+import org.springframework.util.StringUtils;
 
 public class ClientsAndResourcesInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -74,7 +72,11 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
         clientDetails.setAuthorizedGrantTypes(grantTypes);
 
         final String redirectUri = (String) clientConfig.get("redirectUri");
-        clientDetails.setRegisteredRedirectUri(ImmutableSet.of(redirectUri));
+        if (StringUtils.hasText(redirectUri)) {
+          Set<String> redirectUris = Arrays.asList(redirectUri.split(",")).stream().map(String::trim).collect(Collectors.toSet());
+          clientDetails.setRegisteredRedirectUri(redirectUris);
+        }
+
         resourceServersAndClientsToPersist.add(clientDetails);
       });
       resourceServers.forEach(resourceServerConfigObj -> {
