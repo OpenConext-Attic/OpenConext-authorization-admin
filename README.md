@@ -11,7 +11,7 @@ To run locally:
 
 Or use the shortcut:
 
-    ./start.sh
+`./start.sh`
 
 We use sass to ease the pain of CSS development. We recommend you install sass using ruby. Best is to manage your rubies
 with [rbenv](https://github.com/sstephenson/rbenv). After installing rbenv ```cd``` into this directory and run:
