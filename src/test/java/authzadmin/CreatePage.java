@@ -36,7 +36,6 @@ public class CreatePage {
 
   public CreatePage tryCreateClient(OauthSettings oauthSettings) {
     webDriver.findElement(By.id("consumerKey")).sendKeys(oauthSettings.getConsumerKey());
-    webDriver.findElement(By.id("secret")).sendKeys(oauthSettings.getSecret());
     webDriver.findElement(By.id("callbackUrl")).sendKeys(oauthSettings.getCallbackUrl());
 
     oauthSettings.getScopes().forEach(scope -> {
