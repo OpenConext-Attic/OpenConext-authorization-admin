@@ -22,14 +22,14 @@ public class VootClientTest {
 
   @Test
   public void testHasNoAccess() throws Exception {
-    stubFor(get(urlEqualTo("/groups/id1")).willReturn(aResponse().withStatus(404).withHeader("Content-Type", "application/json")));
+    stubFor(get(urlEqualTo("/me/groups/id1")).willReturn(aResponse().withStatus(404).withHeader("Content-Type", "application/json")));
     assertFalse(subject.hasAccess("id1"));
   }
 
   @Test
   public void testHasAccess() throws Exception {
     String response = StreamUtils.copyToString(new ClassPathResource("json/voot_group.json").getInputStream(), Charset.forName("UTF-8"));
-    stubFor(get(urlEqualTo("/groups/id1")).willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json").withBody(response)));
+    stubFor(get(urlEqualTo("/me/groups/id1")).willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json").withBody(response)));
     assertTrue(subject.hasAccess("id1"));
   }
 }

@@ -22,7 +22,7 @@ public class VootClient {
 
   public boolean hasAccess(String allowedGroup) {
     try {
-      Map<String, ?> group = vootService.getForObject(vootServiceUrl + "/groups/{allowedGroup}", Map.class, allowedGroup);
+      Map<String, ?> group = vootService.getForObject(vootServiceUrl + "/me/groups/{allowedGroup}", Map.class, allowedGroup);
       logger.debug("Retrieved group: {}", group);
       return true;
     } catch (HttpClientErrorException e) {
