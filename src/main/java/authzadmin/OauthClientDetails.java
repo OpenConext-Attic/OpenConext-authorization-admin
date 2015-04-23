@@ -13,7 +13,7 @@ public class OauthClientDetails extends BaseClientDetails {
       oauthSettings.getConsumerKey(),
       null,
       CollectionUtils.isEmpty(oauthSettings.getScopes()) ? null : StringUtils.collectionToCommaDelimitedString(oauthSettings.getScopes().stream().map(Scope::getValue).collect(Collectors.toList())),
-      null,
+      "authorization_code,refresh_token,implicit",
       null,
       oauthSettings.getCallbackUrl()
     );
