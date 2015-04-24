@@ -14,7 +14,7 @@
         <ul th:if="${#fields.hasErrors('__${fieldName}__')}">
           <li class="field-error" th:each="err : ${#fields.errors('__${fieldName}__')}" th:text="${err}" />
         </ul>
-        <input type="text" th:field="*{__${fieldName}__}" class="large" th:errorclass="field-error" th:disabled="${fieldName == 'secret'}"/>
+        <input type="text" th:field="*{__${fieldName}__}" class="large" th:errorclass="field-error" th:readonly="${fieldName == 'secret'}"/>
       </div>
     </div>
   </form>
