@@ -79,7 +79,8 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
     web
       .ignoring()
       .antMatchers("/css/**")
-      .antMatchers("/javascripts/**");
+      .antMatchers("/javascripts/**")
+      .antMatchers("/health");
   }
 
   @Override
