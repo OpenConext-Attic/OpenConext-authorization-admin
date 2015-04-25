@@ -74,6 +74,7 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
   }
+
   @Override
   public void configure(WebSecurity web) throws Exception {
     web
@@ -85,8 +86,8 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.
-      addFilterBefore(
+    http
+      .addFilterBefore(
         new ShibbolethPreAuthenticatedProcessingFilter(authenticationManagerBean()),
         AbstractPreAuthenticatedProcessingFilter.class
       )
@@ -97,8 +98,7 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
       .addFilterBefore(
         new OAuth2ClientContextFilter(), EnsureAccessFilter.class
       )
-      .authorizeRequests()
-      .anyRequest().authenticated();
+      .authorizeRequests().anyRequest().authenticated();
   }
 
   @Override
