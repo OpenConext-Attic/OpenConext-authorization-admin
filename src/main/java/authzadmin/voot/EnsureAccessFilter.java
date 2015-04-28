@@ -1,15 +1,14 @@
 package authzadmin.voot;
 
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.filter.GenericFilterBean;
-
+import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class EnsureAccessFilter extends GenericFilterBean {
+import org.springframework.web.filter.OncePerRequestFilter;
+
+public class EnsureAccessFilter extends OncePerRequestFilter {
   private final VootClient vootClient;
   private final String allowedGroup;
 
@@ -22,11 +21,11 @@ public class EnsureAccessFilter extends GenericFilterBean {
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    if(vootClient.hasAccess(allowedGroup)) {
+  public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    if (vootClient.hasAccess(allowedGroup)) {
       chain.doFilter(request, response);
     } else {
-      throw new AccessDeniedException("no access");
+      response.sendError(403, "Forbidden");
     }
   }
 }

@@ -1,6 +1,8 @@
 package authzadmin.web;
 
 import authzadmin.ClientDetailsWrapper;
+
+import com.google.common.collect.ImmutableMap;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigObject;
@@ -35,16 +37,26 @@ public class IndexController extends BaseController implements ApplicationListen
   @Autowired
   private ResourceLoader resourceLoader;
 
+
+  @Value("${allowed_group}")
+  private String allowedGroup;
+
   private List<String> immutableClientIds = new ArrayList<>();
 
   @Autowired
   private ClientRegistrationService clientRegistrationService;
 
-  @RequestMapping(method = GET)
+  @RequestMapping(value="/", method = GET)
   public ModelAndView index() {
     List<ClientDetails> clients = transactionTemplate.execute(transactionStatus -> clientRegistrationService.listClientDetails());
     clients.sort((l, r) -> l.getClientId().compareTo(r.getClientId()));
     return new ModelAndView("index", "clients", clients.stream().map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId()))).collect(Collectors.toList()));
+  }
+
+  @RequestMapping(value="/forbidden")
+  public ModelAndView forbidden() {
+
+    return new ModelAndView("forbidden", ImmutableMap.of("allowedGroup", allowedGroup));
   }
 
   @Override
