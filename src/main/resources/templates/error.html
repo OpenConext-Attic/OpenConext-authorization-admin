@@ -15,6 +15,7 @@
       <p th:utext="*{customErrorSubTitle}?: #{error.subtitle}">
 
       </p>
+      <p th:text="#{error.emailMsg}"></p><a th:href="'mailto:' + ${@environment.getProperty('errorPage.email')}" th:text="${@environment.getProperty('errorPage.email')}"></a>
     </div>
 
   </div>
