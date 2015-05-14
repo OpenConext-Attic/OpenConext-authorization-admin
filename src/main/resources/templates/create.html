@@ -42,8 +42,12 @@
                 </select>
               </div>
             </div>
-
-
+          </div>
+          <div>
+            <label th:for="autoApprove" th:text="#{create.form.autoApprove}"></label>
+            <div>
+              <input type="checkbox" th:field="*{autoApprove}" class="large"/>
+            </div>
           </div>
           <div class="buttons">
             <a href="/" class="c-button">Cancel</a>

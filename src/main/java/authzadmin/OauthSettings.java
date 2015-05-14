@@ -25,6 +25,8 @@ public class OauthSettings {
   @URL
   private String callbackUrl;
 
+  private boolean autoApprove;
+
   @Valid
   private List<Scope> scopes = new ArrayList<>();
 
@@ -51,6 +53,14 @@ public class OauthSettings {
 
   public void setSecret(String secret) {
     this.secret = secret;
+  }
+
+  public void setAutoApprove(boolean autoApprove) {
+    this.autoApprove = autoApprove;
+  }
+
+  public boolean isAutoApprove() {
+    return autoApprove;
   }
 
   /**

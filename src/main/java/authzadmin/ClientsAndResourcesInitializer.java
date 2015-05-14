@@ -71,6 +71,11 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
         final List<String> grantTypes = (List<String>) clientConfig.get("grantTypes");
         clientDetails.setAuthorizedGrantTypes(grantTypes);
 
+        String autoApprove = (String) clientConfig.get("autoApprove");
+        if (autoApprove != null && Boolean.valueOf(autoApprove)) {
+          clientDetails.setAutoApproveScopes(Arrays.asList(OauthClientDetails.AUTO_APPROVE_SCOPE));
+        }
+
         final String redirectUri = (String) clientConfig.get("redirectUri");
         if (StringUtils.hasText(redirectUri)) {
           Set<String> redirectUris = Arrays.asList(redirectUri.split(",")).stream().map(String::trim).collect(Collectors.toSet());

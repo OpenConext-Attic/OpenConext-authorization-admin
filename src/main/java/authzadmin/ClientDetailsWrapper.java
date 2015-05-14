@@ -4,7 +4,6 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 
 public class ClientDetailsWrapper {
 
-
   private final boolean mutable;
   private final ClientDetails clientDetails;
 
@@ -19,5 +18,9 @@ public class ClientDetailsWrapper {
 
   public boolean isMutable() {
     return mutable;
+  }
+
+  public boolean isAutoApprove() {
+    return clientDetails.isAutoApprove(OauthClientDetails.AUTO_APPROVE_SCOPE);
   }
 }
