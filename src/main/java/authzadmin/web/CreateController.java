@@ -1,10 +1,7 @@
 package authzadmin.web;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
-import javax.validation.Valid;
-
+import authzadmin.OauthClientDetails;
+import authzadmin.OauthSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientAlreadyExistsException;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
@@ -14,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import authzadmin.OauthClientDetails;
-import authzadmin.OauthSettings;
+import javax.validation.Valid;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/create")
@@ -35,7 +34,7 @@ public class CreateController extends BaseController {
       return "create";
     }
     try {
-        this.transactionTemplate.execute((transactionStatus) -> {
+      this.transactionTemplate.execute((transactionStatus) -> {
           clientRegistrationService.addClientDetails(new OauthClientDetails(oauthSettings));
           return null;
         }
