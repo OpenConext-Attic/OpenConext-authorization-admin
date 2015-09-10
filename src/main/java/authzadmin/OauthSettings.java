@@ -27,6 +27,8 @@ public class OauthSettings {
 
   private boolean autoApprove;
 
+  private boolean resourceServer;
+
   @Valid
   private List<Scope> scopes = new ArrayList<>();
 
@@ -61,6 +63,14 @@ public class OauthSettings {
 
   public boolean isAutoApprove() {
     return autoApprove;
+  }
+
+  public boolean isResourceServer() {
+    return resourceServer;
+  }
+
+  public void setResourceServer(boolean resourceServer) {
+    this.resourceServer = resourceServer;
   }
 
   /**

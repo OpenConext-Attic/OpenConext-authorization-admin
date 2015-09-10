@@ -46,7 +46,13 @@
           <div>
             <label th:for="autoApprove" th:text="#{create.form.autoApprove}"></label>
             <div>
-              <input type="checkbox" th:field="*{autoApprove}" class="large"/>
+              <input type="checkbox" th:field="*{autoApprove}"/>
+            </div>
+          </div>
+          <div>
+            <label th:for="resourceServer" th:text="#{create.form.resourceServer}"></label>
+            <div>
+              <input type="checkbox" th:field="*{resourceServer}"/>
             </div>
           </div>
           <div class="buttons">

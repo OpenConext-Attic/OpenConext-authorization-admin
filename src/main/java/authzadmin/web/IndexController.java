@@ -50,7 +50,8 @@ public class IndexController extends BaseController implements ApplicationListen
   public ModelAndView index() {
     List<ClientDetails> clients = transactionTemplate.execute(transactionStatus -> clientRegistrationService.listClientDetails());
     clients.sort((l, r) -> l.getClientId().compareTo(r.getClientId()));
-    return new ModelAndView("index", "clients", clients.stream().map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId()))).collect(Collectors.toList()));
+    List<ClientDetailsWrapper> wrappedClients = clients.stream().map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId()))).collect(Collectors.toList());
+    return new ModelAndView("index", "clients", wrappedClients);
   }
 
   @RequestMapping(value="/forbidden")
