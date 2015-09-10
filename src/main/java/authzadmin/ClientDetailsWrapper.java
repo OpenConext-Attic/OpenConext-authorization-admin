@@ -30,4 +30,8 @@ public class ClientDetailsWrapper {
   public boolean isResourceServer() {
     return clientDetails.getAuthorities().contains(ROLE_TOKEN_CHECKER_AUTHORITY) ;
   }
+
+  public boolean isClientCredentialsAllowed() {
+    return clientDetails.getAuthorizedGrantTypes().contains(WebApplication.CLIENT_CREDENTIALS);
+  }
 }

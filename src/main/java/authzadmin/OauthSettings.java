@@ -20,14 +20,14 @@ public class OauthSettings {
   @Size(min = 1)
   private String consumerKey;
 
-  @NotNull
-  @Size(min = 1)
   @URL
   private String callbackUrl;
 
   private boolean autoApprove;
 
   private boolean resourceServer;
+
+  private boolean clientCredentialsAllowed;
 
   @Valid
   private List<Scope> scopes = new ArrayList<>();
@@ -71,6 +71,14 @@ public class OauthSettings {
 
   public void setResourceServer(boolean resourceServer) {
     this.resourceServer = resourceServer;
+  }
+
+  public boolean isClientCredentialsAllowed() {
+    return clientCredentialsAllowed;
+  }
+
+  public void setClientCredentialsAllowed(boolean clientCredentialsAllowed) {
+    this.clientCredentialsAllowed = clientCredentialsAllowed;
   }
 
   /**

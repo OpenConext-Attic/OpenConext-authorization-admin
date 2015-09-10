@@ -55,6 +55,12 @@
               <input type="checkbox" th:field="*{resourceServer}"/>
             </div>
           </div>
+          <div>
+            <label th:for="clientCredentialsAllowed" th:text="#{create.form.clientCredentialsAllowed}"></label>
+            <div>
+              <input type="checkbox" th:field="*{clientCredentialsAllowed}"/>
+            </div>
+          </div>
           <div class="buttons">
             <a href="/" class="c-button">Cancel</a>
             <input name="create-client" type="submit" class="c-button" value="Save"/>

@@ -23,6 +23,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class WebApplication {
 
   public static final String ROLE_TOKEN_CHECKER = "ROLE_TOKEN_CHECKER";
+  public static final String CLIENT_CREDENTIALS = "client_credentials";
 
   public static void main(String[] args) throws Exception {
     SpringApplication.run(WebApplication.class, args);
