@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,7 @@ public class IndexController extends BaseController implements ApplicationListen
 
   @RequestMapping(value="/", method = GET)
   public ModelAndView index() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     List<ClientDetails> clients = transactionTemplate.execute(transactionStatus -> clientRegistrationService.listClientDetails());
     clients.sort((l, r) -> l.getClientId().compareTo(r.getClientId()));
     List<ClientDetailsWrapper> wrappedClients = clients.stream().map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId()))).collect(Collectors.toList());

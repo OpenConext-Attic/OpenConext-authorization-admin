@@ -74,6 +74,10 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
   }
+  /*
+   * See http://stackoverflow.com/questions/22998731/httpsecurity-websecurity-and-authenticationmanagerbuilder
+   * for a quick overview of the differences between the three configure overrides
+   */
 
   @Override
   public void configure(WebSecurity web) throws Exception {
@@ -98,7 +102,7 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
       .addFilterBefore(
         new OAuth2ClientContextFilter(), EnsureAccessFilter.class
       )
-      .authorizeRequests().anyRequest().authenticated();
+        .authorizeRequests().anyRequest().authenticated();
   }
 
   @Override
