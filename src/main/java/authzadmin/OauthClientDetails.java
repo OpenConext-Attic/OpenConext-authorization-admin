@@ -1,17 +1,15 @@
 package authzadmin;
 
-import com.google.common.collect.ImmutableList;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static authzadmin.WebApplication.CLIENT_CREDENTIALS;
+import static authzadmin.WebApplication.ROLE_TOKEN_CHECKER;
 
 public class OauthClientDetails extends BaseClientDetails {
 
@@ -32,10 +30,10 @@ public class OauthClientDetails extends BaseClientDetails {
     );
     setClientSecret(oauthSettings.getSecret());
     if (oauthSettings.isAutoApprove()) {
-      setAutoApproveScopes(Arrays.asList(AUTO_APPROVE_SCOPE));
+      setAutoApproveScopes(Collections.singletonList(AUTO_APPROVE_SCOPE));
     }
     if (oauthSettings.isResourceServer()) {
-      setAuthorities(ImmutableList.of(new SimpleGrantedAuthority(WebApplication.ROLE_TOKEN_CHECKER)));
+      setAuthorities(AuthorityUtils.createAuthorityList(ROLE_TOKEN_CHECKER));
       setAuthorizedGrantTypes(Collections.emptyList());
     }
   }

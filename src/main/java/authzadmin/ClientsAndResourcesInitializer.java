@@ -1,27 +1,26 @@
 package authzadmin;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigObject;
 import org.springframework.util.StringUtils;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static authzadmin.WebApplication.ROLE_TOKEN_CHECKER;
 
 public class ClientsAndResourcesInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -73,7 +72,7 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
 
         String autoApprove = (String) clientConfig.get("autoApprove");
         if (autoApprove != null && Boolean.valueOf(autoApprove)) {
-          clientDetails.setAutoApproveScopes(Arrays.asList(OauthClientDetails.AUTO_APPROVE_SCOPE));
+          clientDetails.setAutoApproveScopes(Collections.singletonList(OauthClientDetails.AUTO_APPROVE_SCOPE));
         }
 
         final String redirectUri = (String) clientConfig.get("redirectUri");
@@ -93,7 +92,7 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
         BaseClientDetails clientDetails = preExistingClientDetails.isPresent() ? (BaseClientDetails) preExistingClientDetails.get() : new BaseClientDetails(clientId, null, null, null, null);
 
         // always add the token checker role
-        clientDetails.setAuthorities(ImmutableList.of(new SimpleGrantedAuthority(WebApplication.ROLE_TOKEN_CHECKER)));
+        clientDetails.setAuthorities(AuthorityUtils.createAuthorityList(ROLE_TOKEN_CHECKER));
         final String secret = (String) resourceServerConfig.get("secret");
         clientDetails.setClientSecret(secret);
         clientDetails.setAuthorizedGrantTypes(Collections.emptyList());

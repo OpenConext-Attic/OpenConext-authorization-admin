@@ -1,8 +1,6 @@
 package authzadmin.web;
 
 import authzadmin.ClientDetailsWrapper;
-
-import com.google.common.collect.ImmutableMap;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigObject;
@@ -12,8 +10,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.stereotype.Controller;
@@ -48,19 +44,17 @@ public class IndexController extends BaseController implements ApplicationListen
   @Autowired
   private ClientRegistrationService clientRegistrationService;
 
-  @RequestMapping(value="/", method = GET)
+  @RequestMapping(value = "/", method = GET)
   public ModelAndView index() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     List<ClientDetails> clients = transactionTemplate.execute(transactionStatus -> clientRegistrationService.listClientDetails());
     clients.sort((l, r) -> l.getClientId().compareTo(r.getClientId()));
     List<ClientDetailsWrapper> wrappedClients = clients.stream().map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId()))).collect(Collectors.toList());
     return new ModelAndView("index", "clients", wrappedClients);
   }
 
-  @RequestMapping(value="/forbidden")
+  @RequestMapping(value = "/forbidden")
   public ModelAndView forbidden() {
-
-    return new ModelAndView("forbidden", ImmutableMap.of("allowedGroup", allowedGroup));
+    return new ModelAndView("forbidden", "allowedGroup", allowedGroup);
   }
 
   @Override

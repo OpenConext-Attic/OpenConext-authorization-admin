@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -40,8 +41,11 @@ public class ShibbolethPreAuthenticatedProcessingFilter extends AbstractPreAuthe
 
   @Override
   protected Object getPreAuthenticatedPrincipal(final HttpServletRequest request) {
-    final Optional<String> uid = Optional.of(request.getHeader(UID_HEADER_NAME));
-    final Optional<String> displayName = Optional.of(request.getHeader(DISPLAY_NAME_HEADER_NAME));
+    Optional<String> uid = Optional.of(request.getHeader(UID_HEADER_NAME));
+    Optional<String> displayName = Optional.of(request.getHeader(DISPLAY_NAME_HEADER_NAME));
+    if (!uid.isPresent() || !displayName.isPresent()) {
+      throw new PreAuthenticatedCredentialsNotFoundException("Missing header information");
+    }
     return new ShibbolethPrincipal(uid.get(), displayName.get());
   }
 

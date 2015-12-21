@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -38,17 +39,11 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private VootClient vootClient;
 
+  @Autowired
+  private Environment environment;
+
   @Value("${allowed_group}")
   private String allowedGroup;
-
-  @Bean
-  @Profile("dev")
-  public FilterRegistrationBean mockShibbolethFilter() {
-    FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-    filterRegistrationBean.setFilter(new MockShibbolethFilter());
-    filterRegistrationBean.addUrlPatterns("/*");
-    return filterRegistrationBean;
-  }
 
   @Bean
   @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
@@ -102,7 +97,14 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
       .addFilterBefore(
         new OAuth2ClientContextFilter(), EnsureAccessFilter.class
       )
-        .authorizeRequests().anyRequest().authenticated();
+      .authorizeRequests().anyRequest().authenticated();
+
+    //we want to specify the exact order and RegistrationBean#setOrder does not support pinpointing the order before class
+    //see https://github.com/spring-projects/spring-boot/issues/1640
+    if (environment.acceptsProfiles("dev")) {
+      http.addFilterBefore(new MockShibbolethFilter(), ShibbolethPreAuthenticatedProcessingFilter.class);
+    }
+
   }
 
   @Override
