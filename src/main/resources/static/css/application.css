@@ -373,6 +373,8 @@ form em.tip {
   .mod-clients table td {
     word-break: break-all;
     text-align: left; }
+  .mod-clients table th.client-actions {
+    min-width: 150px; }
 
 .c-button {
   background: #4DB3CF;
