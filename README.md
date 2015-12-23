@@ -19,6 +19,8 @@ grant all on authzserver.* to 'travis'@'localhost';
 
 In any other environment other then local we connect to the database controlled by [OpenConext-authorization-server](https://github.com/OpenConext/OpenConext-authorization-server) as described in the [README](https://github.com/OpenConext/OpenConext-authorization-server/blob/master/README.md).
 
+In the application.properties we enable Flyway and override this behaviour with ansible for other environments.
+
 To run locally:
 
 `mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=dev"`
