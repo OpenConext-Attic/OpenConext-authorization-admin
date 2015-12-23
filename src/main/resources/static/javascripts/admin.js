@@ -1,9 +1,11 @@
 $(function () {
 
   function addScope(self) {
-    self.before("<span class='tag c-button' data-value='" + self.val() + "'><span>" + self.val() + "</span><a href='#'>x</a></span>")
-    $("#scopes").append("<option selected='selected' value='" + self.val() + "'>" + self.val() + "</option>");
-    self.val("");
+    if (self.val() !== undefined && self.val().trim().length > 0) {
+      self.before("<span class='tag c-button' data-value='" + self.val() + "'><span>" + self.val() + "</span><a href='#'>x</a></span>")
+      $("#scopes").append("<option selected='selected' value='" + self.val() + "'>" + self.val() + "</option>");
+      self.val("");
+    }
   }
 
   $("#scope-name").on("keyup", function (e) {

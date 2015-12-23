@@ -19,7 +19,11 @@ public class OauthSettingsTest {
   @Before
   public void setUp() throws Exception {
     validator = Validation.buildDefaultValidatorFactory().getValidator();
-    oauthSettings = new OauthSettings("secret", "consumerKey", "http://localhost:8080");
+    oauthSettings = oauthSettings();
+  }
+
+  private OauthSettings oauthSettings() {
+    return new OauthSettings("secret", "consumerKey", "http://localhost:8080");
   }
 
   @Test
@@ -36,6 +40,12 @@ public class OauthSettingsTest {
 
     Set<ConstraintViolation<OauthSettings>> violations = validator.validate(oauthSettings);
     assertEquals(1, violations.size());
+  }
+
+  @Test
+  public void testEquals() {
+    OauthSettings other = oauthSettings();
+    assertEquals(oauthSettings, other);
   }
 
   private Scope scope(String value) {

@@ -1,9 +1,23 @@
 # OpenConext-authorization-admin
+
+[![Build Status](https://travis-ci.org/OpenConext/OpenConext-authorization-admin.svg)](https://travis-ci.org/OpenConext/OpenConext-authorization-admin)
+[![codecov.io](https://codecov.io/github/OpenConext/OpenConext-authorization-admin/coverage.svg)](https://codecov.io/github/OpenConext/OpenConext-authorization-admin)
+
 Admin client for the Oauth2 server for the OpenConext platform.
 
 ## Development
 
-Setup the database controlled by [OpenConext-authorization-server](https://github.com/OpenConext/OpenConext-authorization-server) as described in the [README](https://github.com/OpenConext/OpenConext-authorization-server/blob/master/README.md).
+Connect to your local mysql database: `mysql -uroot`
+
+Execute the following:
+
+```sql
+CREATE DATABASE authzserver DEFAULT CHARACTER SET latin1;
+create user 'travis'@'localhost';
+grant all on authzserver.* to 'travis'@'localhost';
+```
+
+In any other environment other then local we connect to the database controlled by [OpenConext-authorization-server](https://github.com/OpenConext/OpenConext-authorization-server) as described in the [README](https://github.com/OpenConext/OpenConext-authorization-server/blob/master/README.md).
 
 To run locally:
 

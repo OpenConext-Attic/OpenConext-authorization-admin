@@ -3,6 +3,11 @@ package authzadmin;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import static java.net.URLEncoder.encode;
+
 public class ClientDetailsWrapper {
 
   private static final SimpleGrantedAuthority ROLE_TOKEN_CHECKER_AUTHORITY = new SimpleGrantedAuthority(WebApplication.ROLE_TOKEN_CHECKER);
@@ -33,5 +38,9 @@ public class ClientDetailsWrapper {
 
   public boolean isClientCredentialsAllowed() {
     return clientDetails.getAuthorizedGrantTypes().contains(WebApplication.CLIENT_CREDENTIALS);
+  }
+
+  public String getClientIdEncoded() throws UnsupportedEncodingException {
+    return encode(getClientDetails().getClientId(), "UTF-8");
   }
 }

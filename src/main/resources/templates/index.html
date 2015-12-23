@@ -34,7 +34,7 @@
               SCOPES
             </td>
             <td>
-              <form th:if="${client.mutable}" class="delete-client" th:action="@{/clients/__${client.clientDetails.clientId}__/delete}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
+              <form th:if="${client.mutable}" class="delete-client" th:action="@{/clients/{id}/delete(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="buttons">
                   <input type="submit" class="c-button" th:value="#{index.actions.delete}"/>
