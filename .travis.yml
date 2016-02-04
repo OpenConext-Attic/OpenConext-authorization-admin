@@ -5,7 +5,7 @@ services:
   - mysql
 before_install:
   - pip install --user codecov
-  - mysql -e "create database IF NOT EXISTS authzserver; grant all on authzserver.* to 'travis';" -uroot
+  - mysql -e "create database IF NOT EXISTS authzserver; grant all on authzserver.* to 'root';" -uroot
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
