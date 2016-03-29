@@ -13,13 +13,13 @@
       <h1 th:text="#{create.title}"></h1>
 
       <div class="createclient-container">
-        <form name="add-service-provider" th:object="${oauthSettings}" method="post">
+        <form name="add-service-provider" th:action="${oauthSettings.newClient ? '/create' : '/edit'}" th:object="${oauthSettings}" method="post">
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
           <div class="fields">
-            <div th:include="forms :: textfield(fieldName=consumerKey, tip=na)"/>
-            <div th:include="forms :: textfield(fieldName=secret, tip=secretTip)"/>
-            <div th:include="forms :: textfield(fieldName=callbackUrl, tip=na)"/>
+            <div th:include="forms :: textfield(fieldName=consumerKey, tip=na, readonly=__${!oauthSettings.newClient}__)"/>
+            <div th:if="${oauthSettings.newClient}" th:include="forms :: textfield(fieldName=secret, tip=secretTip, readonly=true)"/>
+            <div th:include="forms :: textfield(fieldName=callbackUrl, tip=na, readonly=false)"/>
 
             <div>
               <label th:for="scopes" th:text="#{create.form.scopes}"></label>

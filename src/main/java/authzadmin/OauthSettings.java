@@ -1,14 +1,20 @@
 package authzadmin;
 
 import org.hibernate.validator.constraints.URL;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static authzadmin.WebApplication.*;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class OauthSettings {
 
@@ -93,6 +99,19 @@ public class OauthSettings {
     this.callbackUrl = callbackUrl;
   }
 
+  public OauthSettings(ClientDetails clientDetails) {
+    this.secret = clientDetails.getClientSecret();
+    this.consumerKey = clientDetails.getClientId();
+    Set<String> redirectUris = clientDetails.getRegisteredRedirectUri();
+    this.callbackUrl = isEmpty(redirectUris) ? null : redirectUris.iterator().next();
+    Set<String> scopes = clientDetails.getScope();
+    this.scopes = isEmpty(scopes) ? null : scopes.stream().map(Scope::new).collect(toList());
+    this.autoApprove = clientDetails.isAutoApprove("auto");
+    Collection<GrantedAuthority> authorities = clientDetails.getAuthorities();
+    this.resourceServer = isEmpty(authorities) ? false : authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_TOKEN_CHECKER));
+    this.clientCredentialsAllowed = clientDetails.getAuthorizedGrantTypes().stream().anyMatch(grant -> grant.equals(CLIENT_CREDENTIALS));
+  }
+
   public List<Scope> getScopes() {
     return scopes;
   }
@@ -113,6 +132,10 @@ public class OauthSettings {
     if (secret != null ? !secret.equals(that.secret) : that.secret != null) return false;
 
     return true;
+  }
+
+  public boolean isNewClient() {
+    return this.consumerKey == null;
   }
 
   @Override

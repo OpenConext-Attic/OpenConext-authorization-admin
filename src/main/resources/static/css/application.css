@@ -259,6 +259,8 @@ form input[type=text] {
     border: solid 1px #dd3939; }
     form input[type=text].field-error:focus {
       outline-color: #dd3939; }
+form input[readonly=readonly] {
+  color: #a2a2a2; }
 form ul {
   float: right; }
   form ul li.field-error {
@@ -267,7 +269,7 @@ form ul {
     line-height: 20px;
     padding: 5px; }
 form .buttons {
-  margin: 20px 0; }
+  margin: 3px 0px 0px 0px; }
 form input.large {
   width: 100%; }
 form em.tip {
@@ -319,8 +321,8 @@ form em.tip {
   left: 50%;
   top: 65px;
   padding: 5px 20px;
-  margin-left: -150px;
-  margin-right: -150px;
+  margin-left: -225px;
+  margin-right: -225px;
   border: 1px solid #4DB3CF;
   border-radius: 3px;
   background-color: #4DB3CF;
@@ -390,6 +392,9 @@ form em.tip {
   .c-button.disabled {
     opacity: 0.5;
     pointer-events: none; }
+
+a.c-button {
+  padding-bottom: 4px; }
 
 input[type=submit].c-button, button.c-button {
   border: none;

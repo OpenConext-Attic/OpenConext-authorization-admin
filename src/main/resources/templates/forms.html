@@ -7,14 +7,14 @@
 <body>
 <div>
   <form action="#">
-    <div th:fragment="textfield (fieldName, tip)">
+    <div th:fragment="textfield (fieldName, tip, readonly)">
       <label th:for="${fieldName}" th:text="#{create.form.__${fieldName}__}"></label>
       <em th:if="${tip != 'na'}" class="tip" th:text="#{create.form.__${tip}__}"></em>
       <div>
         <ul th:if="${#fields.hasErrors('__${fieldName}__')}">
           <li class="field-error" th:each="err : ${#fields.errors('__${fieldName}__')}" th:text="${err}" />
         </ul>
-        <input type="text" th:field="*{__${fieldName}__}" class="large" th:errorclass="field-error" th:readonly="${fieldName == 'secret'}"/>
+        <input type="text" th:field="*{__${fieldName}__}" class="large" th:errorclass="field-error" th:readonly="${readonly == true}"/>
       </div>
     </div>
   </form>
