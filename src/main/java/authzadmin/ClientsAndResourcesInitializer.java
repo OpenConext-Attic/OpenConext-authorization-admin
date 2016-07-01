@@ -75,11 +75,8 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
           clientDetails.setAutoApproveScopes(Collections.singletonList(OauthClientDetails.AUTO_APPROVE_SCOPE));
         }
 
-        final String redirectUri = (String) clientConfig.get("redirectUri");
-        if (StringUtils.hasText(redirectUri)) {
-          Set<String> redirectUris = Arrays.asList(redirectUri.split(",")).stream().map(String::trim).collect(Collectors.toSet());
-          clientDetails.setRegisteredRedirectUri(redirectUris);
-        }
+        final List<String> redirectUris = (List<String>) clientConfig.get("redirectUris");
+        clientDetails.setRegisteredRedirectUri(new HashSet<>(redirectUris));
 
         resourceServersAndClientsToPersist.add(clientDetails);
       });
