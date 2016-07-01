@@ -19,8 +19,27 @@
           <div class="fields">
             <div th:include="forms :: textfield(fieldName=consumerKey, tip=na, readonly=__${!oauthSettings.newClient}__)"/>
             <div th:if="${oauthSettings.newClient}" th:include="forms :: textfield(fieldName=secret, tip=secretTip, readonly=true)"/>
-            <div th:include="forms :: textfield(fieldName=callbackUrl, tip=na, readonly=false)"/>
-
+            <div>
+              <label th:for="callbackUrls" th:text="#{create.form.callbackUrls}"></label>
+              <em class="tip">Press &lt;enter&gt; to add a redirect URI. A client can have multiple redirect URIs.</em>
+              <em class="tip">It is strongly recommended to register at least one redirect URI.</em>
+              <div>
+                <ul th:if="${#fields.hasErrors('callbackUrls')}">
+                  <li class="field-error" th:each="err : ${#fields.errors('callbackUrls')}" th:text="${err}"/>
+                </ul>
+                <div>
+                  <span th:each="callbackUrl: ${oauthSettings.callbackUrls}" class="tag c-button"
+                        th:attr="data-value=${callbackUrl.value}">
+                    <span th:text="${callbackUrl.value}">tst</span><a href="#">x</a></span>
+                  <input type="text" id="callbackUrl-name" class="large"/>
+                </div>
+                <select th:field="*{callbackUrls}" multiple="multiple" class="hidden">
+                  <option th:each="callbackUrl: ${oauthSettings.callbackUrls}" th:value="${{callbackUrl.value}}" th:text="${callbackUrl.value}">
+                    foo
+                  </option>
+                </select>
+              </div>
+            </div>
             <div>
               <label th:for="scopes" th:text="#{create.form.scopes}"></label>
               <em class="tip">Press &lt;enter&gt; to add a scope. A client can have multiple scopes.</em>

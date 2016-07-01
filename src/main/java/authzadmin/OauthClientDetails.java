@@ -26,7 +26,7 @@ public class OauthClientDetails extends BaseClientDetails {
       CollectionUtils.isEmpty(oauthSettings.getScopes()) ? null : StringUtils.collectionToCommaDelimitedString(oauthSettings.getScopes().stream().map(Scope::getValue).collect(Collectors.toList())),
       oauthSettings.isClientCredentialsAllowed() ? DEFAULT_AUTHORIZED_GRANT_TYPES + "," + CLIENT_CREDENTIALS : DEFAULT_AUTHORIZED_GRANT_TYPES,
       null,
-      oauthSettings.getCallbackUrl()
+      CollectionUtils.isEmpty(oauthSettings.getCallbackUrls()) ? null : StringUtils.collectionToCommaDelimitedString(oauthSettings.getCallbackUrls().stream().map(RedirectURI::getValue).collect(Collectors.toList()))
     );
     setClientSecret(oauthSettings.getSecret());
     if (oauthSettings.isAutoApprove()) {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,9 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.UUID;
 
 import static java.net.URLDecoder.decode;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -40,6 +43,9 @@ public class ClientController extends BaseController {
   @RequestMapping(value = "/create", method = POST)
   public String post(@Valid OauthSettings oauthSettings, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
+      if (bindingResult.getFieldErrors().stream().anyMatch(err -> err.getField().startsWith("callbackUrls["))) {
+        bindingResult.rejectValue("callbackUrls", "create.callbackUrlsInvalid");
+      }
       return "create";
     }
     try {

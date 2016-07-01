@@ -36,7 +36,15 @@ public class CreatePage {
 
   public CreatePage tryCreateClient(OauthSettings oauthSettings) {
     webDriver.findElement(By.id("consumerKey")).sendKeys(oauthSettings.getConsumerKey());
-    webDriver.findElement(By.id("callbackUrl")).sendKeys(oauthSettings.getCallbackUrl());
+
+    oauthSettings.getCallbackUrls().forEach(callbackUrl -> {
+        webDriver.findElement(By.id("callbackUrl-name")).sendKeys(callbackUrl.getValue() + "\n");
+        new WebDriverWait(webDriver, 5)
+          .until(
+            presenceOfElementLocated(By.cssSelector(format("span[data-value='%s']", callbackUrl.getValue())))
+          );
+      }
+    );
 
     oauthSettings.getScopes().forEach(scope -> {
         webDriver.findElement(By.id("scope-name")).sendKeys(scope.getValue() + "\n");

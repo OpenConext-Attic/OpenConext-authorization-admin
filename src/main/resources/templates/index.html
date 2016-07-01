@@ -15,11 +15,12 @@
         <thead>
           <tr>
             <th th:text="#{index.id}">ID</th>
-            <th th:text="#{index.redirect_uri}">REDIRECT_URI</th>
+            <th th:text="#{index.redirect_uris}">REDIRECT_URI</th>
             <th th:text="#{index.scopes}">SCOPES</th>
             <th class="client-actions" th:text="#{index.actions}">ACTIONS</th>
             <th th:text="#{index.autoApprove}">AUTO_APPROVE</th>
             <th th:text="#{index.resourceServer}">RESOURCE_SERVER</th>
+            <th th:text="#{index.clientCredentials}">CLIENT_CREDENTIALS</th>
           </tr>
         </thead>
         <tbody>
@@ -59,6 +60,9 @@
             </td>
             <td>
               <input type="checkbox" class="large" th:checked="${client.resourceServer}" th:disabled="${1 == 1}"/>
+            </td>
+            <td>
+              <input type="checkbox" class="large" th:checked="${client.clientCredentialsAllowed}" th:disabled="${1 == 1}"/>
             </td>
           </tr>
         </tbody>

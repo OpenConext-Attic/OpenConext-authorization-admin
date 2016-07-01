@@ -31,7 +31,7 @@ public class OauthClientDetailsTest {
     List<Scope> scopes = Arrays.asList(new Scope("read"), new Scope("write"));
     oauthSettings.setScopes(scopes);
     OauthClientDetails detail = new OauthClientDetails( oauthSettings);
-    assertTrue(detail.getScope().equals(new TreeSet(Arrays.asList("read","write"))));
+    assertTrue(detail.getScope().equals(new TreeSet<>(Arrays.asList("read","write"))));
   }
 
   @Test

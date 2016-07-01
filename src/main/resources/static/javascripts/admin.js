@@ -1,30 +1,31 @@
 $(function () {
 
-  function addScope(self) {
+  function addScopeOrCallbackUrl(self) {
     if (self.val() !== undefined && self.val().trim().length > 0) {
-      self.before("<span class='tag c-button' data-value='" + self.val() + "'><span>" + self.val() + "</span><a href='#'>x</a></span>")
-      $("#scopes").append("<option selected='selected' value='" + self.val() + "'>" + self.val() + "</option>");
+      self.before("<span class='tag c-button' data-value='" + self.val() + "'><span>" + self.val() + "</span><a href='#'>x</a></span>");
+      var parent = self.prop('id') === "scope-name" ? $("#scopes") : $("#callbackUrls");
+      parent.append("<option selected='selected' value='" + self.val() + "'>" + self.val() + "</option>");
       self.val("");
     }
   }
 
-  $("#scope-name").on("keyup", function (e) {
+  $("#scope-name, #callbackUrl-name").on("keyup", function (e) {
     var self = $(this);
     if (e.which == 13) {
-      addScope(self);
+      addScopeOrCallbackUrl(self);
     }
     return false;
   });
 
-  $("#scope-name").on("blur", function (e) {
+  $("#scope-name, #callbackUrl-name").on("blur", function (e) {
     var self = $(this);
     if (self.val()) {
-      addScope(self);
+      addScopeOrCallbackUrl(self);
     }
     return false;
   });
 
-  $("#scope-name").on("keypress", function (e) {
+  $("#scope-name, #callbackUrl-name").on("keypress", function (e) {
     if (e.which == 13) {
       // Stop form submit by returning false
       return false;
@@ -33,8 +34,9 @@ $(function () {
 
   $(document).on("click", ".tag a", function (e) {
     var self = $(this);
-    var optionValue = self.parent().data("value");
-    $("#scopes option[value='" + optionValue + "']").remove();
+    var value = self.parent().data("value");
+    $("#scopes option[value='" + value + "']").remove();
+    $("#callbackUrls option[value='" + value + "']").remove();
     self.parent().remove();
   });
 
