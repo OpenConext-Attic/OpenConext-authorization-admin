@@ -75,6 +75,24 @@
             </div>
           </div>
           <div>
+            <label th:for="authorizationCodeAllowed" th:text="#{create.form.authorizationCodeAllowed}"></label>
+            <div>
+              <input type="checkbox" th:field="*{authorizationCodeAllowed}"/>
+            </div>
+          </div>
+          <div>
+            <label th:for="refreshTokenAllowed" th:text="#{create.form.refreshTokenAllowed}"></label>
+            <div>
+              <input type="checkbox" th:field="*{refreshTokenAllowed}"/>
+            </div>
+          </div>
+          <div>
+            <label th:for="implicitGrantAllowed" th:text="#{create.form.implicitGrantAllowed}"></label>
+            <div>
+              <input type="checkbox" th:field="*{implicitGrantAllowed}"/>
+            </div>
+          </div>
+          <div>
             <label th:for="clientCredentialsAllowed" th:text="#{create.form.clientCredentialsAllowed}"></label>
             <div>
               <input type="checkbox" th:field="*{clientCredentialsAllowed}"/>

@@ -40,6 +40,18 @@ public class ClientDetailsWrapper {
     return clientDetails.getAuthorizedGrantTypes().contains(WebApplication.CLIENT_CREDENTIALS);
   }
 
+  public boolean isImplicitGrantAllowed() {
+    return clientDetails.getAuthorizedGrantTypes().contains(WebApplication.IMPLICIT);
+  }
+
+  public boolean isRefreshTokenAllowed() {
+    return clientDetails.getAuthorizedGrantTypes().contains(WebApplication.REFRESH_TOKEN);
+  }
+
+  public boolean isAuthorizationCodeAllowed() {
+    return clientDetails.getAuthorizedGrantTypes().contains(WebApplication.AUTHORIZATION_CODE);
+  }
+
   public String getClientIdEncoded() throws UnsupportedEncodingException {
     return encode(getClientDetails().getClientId(), "UTF-8");
   }

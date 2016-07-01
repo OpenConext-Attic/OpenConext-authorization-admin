@@ -8,6 +8,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Set;
 
+import static authzadmin.WebApplication.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -35,11 +36,28 @@ public class OauthSettingsTest {
   }
 
   @Test
+  public void testInvalidRedirect() throws Exception {
+    oauthSettings.setCallbackUrls(asList(redirectURI("foo"), redirectURI("foo_bar"),redirectURI("http://localhost:8080")));
+
+    Set<ConstraintViolation<OauthSettings>> violations = validator.validate(oauthSettings);
+    assertEquals(2, violations.size());
+  }
+
+  @Test
   public void testNoSpacesInScopeNames() throws Exception {
     oauthSettings.setScopes(asList(scope("foo bar")));
 
     Set<ConstraintViolation<OauthSettings>> violations = validator.validate(oauthSettings);
     assertEquals(1, violations.size());
+  }
+
+  @Test
+  public void testGrantTypes() throws Exception {
+    oauthSettings.setAuthorizationCodeAllowed(true);
+    oauthSettings.setRefreshTokenAllowed(true);
+    oauthSettings.setImplicitGrantAllowed(true);
+    oauthSettings.setClientCredentialsAllowed(true);
+    assertEquals(String.join(",",asList(AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT, CLIENT_CREDENTIALS)),oauthSettings.grantTypes());
   }
 
   @Test
@@ -50,5 +68,8 @@ public class OauthSettingsTest {
 
   private Scope scope(String value) {
     return new Scope(value);
+  }
+  private RedirectURI redirectURI(String value) {
+    return new RedirectURI(value);
   }
 }

@@ -103,6 +103,7 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
     //see https://github.com/spring-projects/spring-boot/issues/1640
     if (environment.acceptsProfiles("dev")) {
       http.addFilterBefore(new MockShibbolethFilter(), ShibbolethPreAuthenticatedProcessingFilter.class);
+      http.csrf().disable();
     }
 
   }

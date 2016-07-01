@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{welcome.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="l-mini">
+    <div class="mod-createclient">
+
+      <h1 th:text="#{create-resource-server.title}"></h1>
+
+      <div class="createclient-container">
+        <form name="add-service-provider" th:action="${oauthSettings.newClient ? '/create' : '/edit'}" th:object="${oauthSettings}" method="post">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="hidden" th:field="*{resourceServer}"/>
+          <input type="hidden" th:field="*{refreshTokenAllowed}"/>
+          <input type="hidden" th:field="*{authorizationCodeAllowed}"/>
+
+          <div class="fields">
+            <div th:include="forms :: textfield(fieldName=consumerKey, tip=na, readonly=__${!oauthSettings.newClient}__)"/>
+            <div th:if="${oauthSettings.newClient}" th:include="forms :: textfield(fieldName=secret, tip=secretTip, readonly=true)"/>
+          </div>
+          <div class="buttons">
+            <a href="/" class="c-button">Cancel</a>
+            <input name="create-client" type="submit" class="c-button" value="Save"/>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

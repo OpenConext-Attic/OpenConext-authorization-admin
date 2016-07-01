@@ -10,6 +10,8 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +20,16 @@ import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 public class WebApplication {
 
   public static final String ROLE_TOKEN_CHECKER = "ROLE_TOKEN_CHECKER";
+  public static final String AUTHORIZATION_CODE = "authorization_code";
+  public static final String REFRESH_TOKEN = "refresh_token";
+  public static final String IMPLICIT = "implicit";
   public static final String CLIENT_CREDENTIALS = "client_credentials";
 
   public static void main(String[] args) throws Exception {
@@ -69,6 +76,17 @@ public class WebApplication {
   @Bean
   public EmbeddedServletContainerCustomizer containerCustomizer(){
     return new ErrorCustomizer();
+  }
+
+  @Configuration
+  public static class DefaultView extends WebMvcConfigurerAdapter {
+
+    @Override
+    public void addViewControllers( ViewControllerRegistry registry ) {
+      registry.addViewController( "/" ).setViewName( "redirect:/clients.html" );
+      registry.setOrder( Ordered.HIGHEST_PRECEDENCE );
+      super.addViewControllers( registry );
+    }
   }
 
   private static class ErrorCustomizer implements EmbeddedServletContainerCustomizer {

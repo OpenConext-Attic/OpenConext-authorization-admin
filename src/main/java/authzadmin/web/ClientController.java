@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.provider.client.JdbcClientDetailsServ
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,16 +38,22 @@ public class ClientController extends BaseController {
 
   @RequestMapping(value = "/create", method = GET)
   public ModelAndView get(OauthSettings oauthSettings) {
-    return new ModelAndView("create");
+    return new ModelAndView("create","oauthSettings",oauthSettings);
   }
+
+  @RequestMapping(value = "/create-resource-server", method = GET)
+  public ModelAndView createResourceServer(OauthSettings oauthSettings) {
+    oauthSettings.setResourceServer(true);
+    oauthSettings.setAuthorizationCodeAllowed(false);
+    oauthSettings.setRefreshTokenAllowed(false);
+    return new ModelAndView("create-resource-server","oauthSettings",oauthSettings);
+  }
+
 
   @RequestMapping(value = "/create", method = POST)
   public String post(@Valid OauthSettings oauthSettings, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    if (bindingResult.hasErrors()) {
-      if (bindingResult.getFieldErrors().stream().anyMatch(err -> err.getField().startsWith("callbackUrls["))) {
-        bindingResult.rejectValue("callbackUrls", "create.callbackUrlsInvalid");
-      }
-      return "create";
+    if (hasErrors(oauthSettings, bindingResult)) {
+      return oauthSettings.isResourceServer() ? "create-resource-server" : "create";
     }
     try {
       this.transactionTemplate.execute((transactionStatus) -> {
@@ -58,7 +65,7 @@ public class ClientController extends BaseController {
       return "redirect:/";
     } catch (ClientAlreadyExistsException e) {
       bindingResult.rejectValue("consumerKey", "create.clientAlreadyExists");
-      return "create";
+      return oauthSettings.isResourceServer() ? "create-resource-server" : "create";
     }
   }
 
@@ -67,13 +74,21 @@ public class ClientController extends BaseController {
     String decodedId = decode(id, "UTF-8");
     ClientDetails clientDetails =
       ((JdbcClientDetailsService) clientRegistrationService).loadClientByClientId(decodedId);
-    return new ModelAndView("create", "oauthSettings", new OauthSettings(clientDetails));
+    return new ModelAndView("create", "oauthSettings",  new OauthSettings(clientDetails));
+  }
+
+  @RequestMapping(value = "/clients/{id}/edit", method = POST)
+  public ModelAndView editResourceServer(@PathVariable(value = "id") String id, OauthSettings oauthSettings) throws UnsupportedEncodingException {
+    String decodedId = decode(id, "UTF-8");
+    ClientDetails clientDetails =
+      ((JdbcClientDetailsService) clientRegistrationService).loadClientByClientId(decodedId);
+    return new ModelAndView("create-resource-server", "oauthSettings",  new OauthSettings(clientDetails));
   }
 
   @RequestMapping(value = "/edit", method = POST)
   public String update(@Valid OauthSettings oauthSettings, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    if (bindingResult.hasErrors()) {
-      return "create";
+    if (hasErrors(oauthSettings, bindingResult)) {
+      return oauthSettings.isResourceServer() ? "create-resource-server" : "create";
     }
     this.transactionTemplate.execute((transactionStatus) -> {
         clientRegistrationService.updateClientDetails(new OauthClientDetails(oauthSettings));
@@ -95,6 +110,21 @@ public class ClientController extends BaseController {
     );
     notice(redirectAttributes, "reset.success", newSecret);
     return "redirect:/";
+  }
+
+  private boolean hasErrors(OauthSettings oauthSettings, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      if (bindingResult.getFieldErrors().stream().anyMatch(err -> err.getField().startsWith("callbackUrls["))) {
+        bindingResult.rejectValue("callbackUrls", "create.callbackUrlsInvalid");
+      }
+      return true;
+    }
+    if ((oauthSettings.isAuthorizationCodeAllowed() || oauthSettings.isImplicitGrantAllowed())
+      && CollectionUtils.isEmpty(oauthSettings.getCallbackUrls())) {
+      bindingResult.rejectValue("callbackUrls", "create.callbackUrlsRequired");
+      return true;
+    }
+    return false;
   }
 
 }

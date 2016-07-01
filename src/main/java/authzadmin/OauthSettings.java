@@ -33,10 +33,43 @@ public class OauthSettings {
 
   private boolean resourceServer;
 
+  private boolean authorizationCodeAllowed = true;
+  private boolean refreshTokenAllowed = true;
+  private boolean implicitGrantAllowed;
   private boolean clientCredentialsAllowed;
 
   @Valid
   private List<Scope> scopes = new ArrayList<>();
+  private boolean newClient = true;
+
+  /**
+   * Needed for Spring form binding.
+   */
+  public OauthSettings() {
+  }
+
+  public OauthSettings(String secret, String consumerKey, String callbackUrl) {
+    this.secret = secret;
+    this.consumerKey = consumerKey;
+    this.callbackUrls = Arrays.asList(new RedirectURI(callbackUrl));
+  }
+
+  public OauthSettings(ClientDetails clientDetails) {
+    this.secret = clientDetails.getClientSecret();
+    this.consumerKey = clientDetails.getClientId();
+    Set<String> registeredRedirectUri = clientDetails.getRegisteredRedirectUri();
+    this.callbackUrls = isEmpty(registeredRedirectUri) ? null : registeredRedirectUri.stream().map(RedirectURI::new).collect(toList());
+    Set<String> scopes = clientDetails.getScope();
+    this.scopes = isEmpty(scopes) ? null : scopes.stream().map(Scope::new).collect(toList());
+    this.autoApprove = clientDetails.isAutoApprove("auto");
+    Collection<GrantedAuthority> authorities = clientDetails.getAuthorities();
+    this.resourceServer = isEmpty(authorities) ? false : authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_TOKEN_CHECKER));
+    this.authorizationCodeAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.AUTHORIZATION_CODE);
+    this.refreshTokenAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.REFRESH_TOKEN);
+    this.implicitGrantAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.IMPLICIT);
+    this.clientCredentialsAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.CLIENT_CREDENTIALS);
+    newClient = false;
+  }
 
   public String getConsumerKey() {
     return consumerKey;
@@ -87,31 +120,6 @@ public class OauthSettings {
     this.clientCredentialsAllowed = clientCredentialsAllowed;
   }
 
-  /**
-   * Needed for Spring form binding.
-   */
-  public OauthSettings() {
-  }
-
-  public OauthSettings(String secret, String consumerKey, String callbackUrl) {
-    this.secret = secret;
-    this.consumerKey = consumerKey;
-    this.callbackUrls = Arrays.asList(new RedirectURI(callbackUrl));
-  }
-
-  public OauthSettings(ClientDetails clientDetails) {
-    this.secret = clientDetails.getClientSecret();
-    this.consumerKey = clientDetails.getClientId();
-    Set<String> registeredRedirectUri = clientDetails.getRegisteredRedirectUri();
-    this.callbackUrls = isEmpty(registeredRedirectUri) ? null : registeredRedirectUri.stream().map(RedirectURI::new).collect(toList());
-    Set<String> scopes = clientDetails.getScope();
-    this.scopes = isEmpty(scopes) ? null : scopes.stream().map(Scope::new).collect(toList());
-    this.autoApprove = clientDetails.isAutoApprove("auto");
-    Collection<GrantedAuthority> authorities = clientDetails.getAuthorities();
-    this.resourceServer = isEmpty(authorities) ? false : authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_TOKEN_CHECKER));
-    this.clientCredentialsAllowed = clientDetails.getAuthorizedGrantTypes().stream().anyMatch(grant -> grant.equals(CLIENT_CREDENTIALS));
-  }
-
   public List<Scope> getScopes() {
     return scopes;
   }
@@ -121,7 +129,52 @@ public class OauthSettings {
   }
 
   public boolean isNewClient() {
-    return this.consumerKey == null;
+    return this.newClient;
+  }
+
+  public void setNewClient(boolean newClient) {
+    this.newClient = newClient;
+  }
+
+  public boolean isAuthorizationCodeAllowed() {
+    return authorizationCodeAllowed;
+  }
+
+  public void setAuthorizationCodeAllowed(boolean authorizationCodeAllowed) {
+    this.authorizationCodeAllowed = authorizationCodeAllowed;
+  }
+
+  public boolean isRefreshTokenAllowed() {
+    return refreshTokenAllowed;
+  }
+
+  public void setRefreshTokenAllowed(boolean refreshTokenAllowed) {
+    this.refreshTokenAllowed = refreshTokenAllowed;
+  }
+
+  public boolean isImplicitGrantAllowed() {
+    return implicitGrantAllowed;
+  }
+
+  public void setImplicitGrantAllowed(boolean implicitGrantAllowed) {
+    this.implicitGrantAllowed = implicitGrantAllowed;
+  }
+
+  public String grantTypes() {
+    List<String> grantTypes = new ArrayList<>();
+    if (authorizationCodeAllowed) {
+      grantTypes.add(WebApplication.AUTHORIZATION_CODE);
+    }
+    if (refreshTokenAllowed) {
+      grantTypes.add(WebApplication.REFRESH_TOKEN);
+    }
+    if (implicitGrantAllowed) {
+      grantTypes.add(WebApplication.IMPLICIT);
+    }
+    if (clientCredentialsAllowed) {
+      grantTypes.add(WebApplication.CLIENT_CREDENTIALS);
+    }
+    return String.join(",", grantTypes);
   }
 
   @Override
@@ -129,18 +182,12 @@ public class OauthSettings {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     OauthSettings that = (OauthSettings) o;
-    return autoApprove == that.autoApprove &&
-      resourceServer == that.resourceServer &&
-      clientCredentialsAllowed == that.clientCredentialsAllowed &&
-      Objects.equals(secret, that.secret) &&
-      Objects.equals(consumerKey, that.consumerKey) &&
-      Objects.equals(callbackUrls, that.callbackUrls) &&
-      Objects.equals(scopes, that.scopes);
+    return Objects.equals(consumerKey, that.consumerKey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(consumerKey, callbackUrls, scopes);
+    return Objects.hash(consumerKey);
   }
 
   @Override

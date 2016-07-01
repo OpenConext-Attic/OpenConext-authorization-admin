@@ -2,6 +2,9 @@ package authzadmin;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import static org.junit.Assert.*;
 
 public class ScopeTest {
@@ -12,5 +15,7 @@ public class ScopeTest {
     Scope s2 = new Scope("value");
 
     assertEquals(s1, s2);
+
+    assertEquals(1, new HashSet(Arrays.asList(s1, s2)).size());
   }
 }
