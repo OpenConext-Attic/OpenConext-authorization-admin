@@ -45,8 +45,18 @@ public class ClientValidatorTest {
   }
 
   @Test
-  public void testCallbackRequired() throws Exception {
+  public void testCallbackRequiredForAuthorizationCode() throws Exception {
     settings.setAuthorizationCodeAllowed(true);
+    callbackRequired();
+  }
+
+  @Test
+  public void testCallbackRequiredForImplicit() throws Exception {
+    settings.setImplicitGrantAllowed(true);
+    callbackRequired();
+  }
+
+  private void callbackRequired() {
     hasError();
 
     String code = bindingResult.getFieldError("callbackUrls").getCode();

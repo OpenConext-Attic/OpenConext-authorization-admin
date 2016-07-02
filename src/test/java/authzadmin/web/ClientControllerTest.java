@@ -45,6 +45,22 @@ public class ClientControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
+  public void testCreateClientErrors() throws Exception {
+    MultiValueMap<String, String> map = formMap("resourceServer=true&secret=secret");
+    ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/create", map, String.class);
+
+    assertTrue(response.getBody().contains("may not be null"));
+  }
+
+  @Test
+  public void testEditClientErrors() throws Exception {
+    MultiValueMap<String, String> map = formMap("resourceServer=true&secret=secret");
+    ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/edit", map, String.class);
+
+    assertTrue(response.getBody().contains("may not be null"));
+  }
+
+  @Test
   public void getCreateResourceServer() throws Exception {
     ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/create-resource-server", String.class);
 

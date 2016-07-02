@@ -12,7 +12,8 @@ public class ScopeTest {
   @Test
   public void testEquals() throws Exception {
     Scope s1 = new Scope("value");
-    Scope s2 = new Scope("value");
+    Scope s2 = new Scope();
+    s2.setValue("value");
 
     assertEquals(s1, s2);
 

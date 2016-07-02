@@ -14,9 +14,6 @@ public class EnsureAccessFilter extends OncePerRequestFilter {
 
   public EnsureAccessFilter(VootClient vootClient, String allowedGroup) {
     this.allowedGroup = allowedGroup;
-    if (vootClient == null) {
-      throw new IllegalArgumentException("vootClient cannot be null");
-    }
     this.vootClient = vootClient;
   }
 

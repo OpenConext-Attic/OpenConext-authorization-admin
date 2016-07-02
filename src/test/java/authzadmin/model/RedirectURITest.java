@@ -12,7 +12,8 @@ public class RedirectURITest {
   @Test
   public void testEquals() throws Exception {
     RedirectURI u1 = new RedirectURI("value");
-    RedirectURI u2 = new RedirectURI("value");
+    RedirectURI u2 = new RedirectURI();
+    u2.setValue("value");
 
     assertEquals(u1, u2);
 
