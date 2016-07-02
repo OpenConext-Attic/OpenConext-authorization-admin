@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -44,12 +45,26 @@ public class IndexController extends BaseController implements ApplicationListen
   @Autowired
   private ClientRegistrationService clientRegistrationService;
 
-  @RequestMapping(value = "/", method = GET)
-  public ModelAndView index() {
+  @RequestMapping(value = "/clients", method = GET)
+  public ModelAndView clients() {
+    return doClients("clients", client -> !client.isResourceServer());
+  }
+
+  @RequestMapping(value = "/resource-servers", method = GET)
+  public ModelAndView resourceServers() {
+    return doClients("resource-servers", client -> client.isResourceServer());
+  }
+
+  private ModelAndView doClients(String viewName, Predicate<ClientDetailsWrapper> filter) {
     List<ClientDetails> clients = transactionTemplate.execute(transactionStatus -> clientRegistrationService.listClientDetails());
     clients.sort((l, r) -> l.getClientId().compareTo(r.getClientId()));
-    List<ClientDetailsWrapper> wrappedClients = clients.stream().map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId()))).collect(Collectors.toList());
-    return new ModelAndView("index", "clients", wrappedClients);
+    List<ClientDetailsWrapper> wrappedClients = clients.stream()
+      .map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId())))
+      .filter(filter)
+      .collect(Collectors.toList());
+    ModelAndView model = new ModelAndView(viewName, "clients", wrappedClients);
+    model.addObject("viewName", viewName);
+    return model;
   }
 
   @RequestMapping(value = "/forbidden")

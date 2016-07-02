@@ -1,5 +1,6 @@
-package authzadmin;
+package authzadmin.model;
 
+import authzadmin.OauthClientDetails;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;

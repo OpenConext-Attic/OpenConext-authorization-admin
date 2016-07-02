@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{welcome.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="l-mini">
+    <a id="add-resource-server" class="c-button" href="/create-resource-server" th:href="@{/create-resource-server}" th:text="#{index.create-resource-server}">Add client</a>
+
+    <div class="mod-clients">
+      <table>
+        <thead>
+        <tr>
+          <th th:text="#{index.id}">ID</th>
+          <th class="client-actions" th:text="#{index.actions}">ACTIONS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  th:each="client: ${clients}">
+          <td th:text="${client.clientDetails.clientId}">
+            CLIENT_ID
+          </td>
+          <td>
+            <form th:if="${client.mutable}" class="delete-client" th:action="@{/clients/{id}/delete(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
+              <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <div class="buttons">
+                <input type="submit" class="c-button" th:value="#{index.actions.delete}"/>
+              </div>
+            </form>
+            <form th:if="${client.mutable}" class="edit-client" th:action="@{/clients/{id}/edit-resource-server(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
+              <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <div class="buttons">
+                <input type="submit" class="c-button" th:value="#{index.actions.edit}"/>
+              </div>
+            </form>
+            <form th:if="${client.mutable}" class="reset-secret" th:action="@{/clients/{id}/reset(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
+              <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <div class="buttons">
+                <input type="submit" class="c-button" th:value="#{index.actions.reset}"/>
+              </div>
+            </form>
+            <p th:if="${!client.mutable}" th:text="#{index.actions.preconfigured}">Pre-configured</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

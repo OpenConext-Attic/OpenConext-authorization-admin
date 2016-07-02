@@ -14,7 +14,9 @@
 
       <div class="createclient-container">
         <form name="add-service-provider" th:action="${oauthSettings.newClient ? '/create' : '/edit'}" th:object="${oauthSettings}" method="post">
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+          <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="hidden" th:field="*{resourceServer}"/>
 
           <div class="fields">
             <div th:include="forms :: textfield(fieldName=consumerKey, tip=na, readonly=__${!oauthSettings.newClient}__)"/>
@@ -62,23 +64,28 @@
               </div>
             </div>
           </div>
-          <div>
+          <div class="checkbox-element">
+            <input id="autoApprove" type="checkbox" th:field="*{autoApprove}"/>
             <label th:for="autoApprove" th:text="#{create.form.autoApprove}"></label>
-            <div>
-              <input type="checkbox" th:field="*{autoApprove}"/>
-            </div>
           </div>
-          <div>
-            <label th:for="resourceServer" th:text="#{create.form.resourceServer}"></label>
-            <div>
-              <input type="checkbox" th:field="*{resourceServer}"/>
-            </div>
+          <ul th:if="${#fields.hasErrors('authorizationCodeAllowed')}">
+            <li class="field-error" th:each="err : ${#fields.errors('authorizationCodeAllowed')}" th:text="${err}"/>
+          </ul>
+          <div class="checkbox-element">
+            <input id="authorizationCodeAllowed" type="checkbox" th:field="*{authorizationCodeAllowed}"/>
+            <label th:for="authorizationCodeAllowed" th:text="#{create.form.authorizationCodeAllowed}"></label>
           </div>
-          <div>
+          <div class="checkbox-element">
+            <input id="refreshTokenAllowed" type="checkbox" th:field="*{refreshTokenAllowed}"/>
+            <label th:for="refreshTokenAllowed" th:text="#{create.form.refreshTokenAllowed}"></label>
+          </div>
+          <div class="checkbox-element">
+            <input id="implicitGrantAllowed" type="checkbox" th:field="*{implicitGrantAllowed}"/>
+            <label th:for="implicitGrantAllowed" th:text="#{create.form.implicitGrantAllowed}"></label>
+          </div>
+          <div class="checkbox-element">
+            <input id="clientCredentialsAllowed" type="checkbox" th:field="*{clientCredentialsAllowed}"/>
             <label th:for="clientCredentialsAllowed" th:text="#{create.form.clientCredentialsAllowed}"></label>
-            <div>
-              <input type="checkbox" th:field="*{clientCredentialsAllowed}"/>
-            </div>
           </div>
           <div class="buttons">
             <a href="/" class="c-button">Cancel</a>

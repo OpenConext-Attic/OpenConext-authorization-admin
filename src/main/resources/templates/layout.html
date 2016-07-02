@@ -15,7 +15,12 @@
 <div class="l-header">
   <div class="mod-header">
     <h1 class="title"><a href="/" th:href="@{/}">Authorization Server Admin Client</a></h1>
-
+    <nav class="navigation">
+      <ul>
+        <li><a href="/clients" th:href="@{/clients}" th:classappend="${viewName == 'clients'} ? 'active'">Clients</a></li>
+        <li><a href="/resource-servers" th:href="@{/resource-servers}" th:classappend="${viewName == 'resource-servers'} ? 'active'">Resource Servers</a></li>
+      </ul>
+    </nav>
     <div class="meta">
       <div class="name" sec:authentication="principal.displayName">Bob</div>
     </div>

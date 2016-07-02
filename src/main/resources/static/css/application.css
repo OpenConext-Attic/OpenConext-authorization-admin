@@ -275,6 +275,8 @@ form input.large {
 form em.tip {
   display: block;
   font-size: smaller; }
+form div.checkbox-element {
+  margin: 5px 0px; }
 
 .mod-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -377,6 +379,15 @@ form em.tip {
     text-align: left; }
   .mod-clients table th.client-actions {
     min-width: 150px; }
+
+nav.navigation {
+  display: inline-block;
+  margin-left: 100px; }
+  nav.navigation ul li {
+    display: inline-block;
+    padding: 10px; }
+    nav.navigation ul li a.active {
+      font-weight: 900; }
 
 .c-button {
   background: #4DB3CF;
