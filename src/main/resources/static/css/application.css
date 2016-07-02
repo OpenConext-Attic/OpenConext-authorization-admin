@@ -261,13 +261,11 @@ form input[type=text] {
       outline-color: #dd3939; }
 form input[readonly=readonly] {
   color: #a2a2a2; }
-form ul {
-  float: right; }
-  form ul li.field-error {
-    list-style: none;
-    color: #dd3939;
-    line-height: 20px;
-    padding: 5px; }
+form ul li.field-error {
+  list-style: none;
+  color: #dd3939;
+  line-height: 20px;
+  padding: 5px; }
 form .buttons {
   margin: 3px 0px 0px 0px; }
 form input.large {

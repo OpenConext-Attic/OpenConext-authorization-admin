@@ -10,6 +10,9 @@ public class ClientValidator {
       if (bindingResult.getFieldErrors().stream().anyMatch(err -> err.getField().startsWith("callbackUrls["))) {
         bindingResult.rejectValue("callbackUrls", "create.callbackUrlsInvalid");
       }
+      if (bindingResult.getFieldErrors().stream().anyMatch(err -> err.getField().startsWith("scopes["))) {
+        bindingResult.rejectValue("scopes", "create.scopesInvalid");
+      }
       return true;
     }
     if ((oauthSettings.isAuthorizationCodeAllowed() || oauthSettings.isImplicitGrantAllowed())
