@@ -108,7 +108,7 @@ public class ClientController extends BaseController {
       }
     );
     notice(redirectAttributes, "reset.success", newSecret);
-    return "redirect:/";
+    return "redirect:/clients";
   }
 
 }

@@ -29,6 +29,6 @@ public class DeleteController extends BaseController {
       }
     );
     notice(redirectAttributes, "delete.success");
-    return "redirect:/";
+    return "redirect:/clients";
   }
 }
