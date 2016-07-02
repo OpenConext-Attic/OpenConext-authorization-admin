@@ -76,8 +76,9 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
         }
 
         final List<String> redirectUris = (List<String>) clientConfig.get("redirectUris");
-        clientDetails.setRegisteredRedirectUri(new HashSet<>(redirectUris));
-
+        if (redirectUris != null) {
+          clientDetails.setRegisteredRedirectUri(new HashSet<>(redirectUris));
+        }
         resourceServersAndClientsToPersist.add(clientDetails);
       });
       resourceServers.forEach(resourceServerConfigObj -> {
