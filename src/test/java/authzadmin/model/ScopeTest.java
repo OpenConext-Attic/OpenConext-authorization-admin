@@ -1,4 +1,4 @@
-package authzadmin;
+package authzadmin.model;
 
 import org.junit.Test;
 

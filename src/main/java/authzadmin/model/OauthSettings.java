@@ -1,5 +1,6 @@
-package authzadmin;
+package authzadmin.model;
 
+import authzadmin.WebApplication;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -33,8 +34,8 @@ public class OauthSettings {
 
   private boolean resourceServer;
 
-  private boolean authorizationCodeAllowed = true;
-  private boolean refreshTokenAllowed = true;
+  private boolean authorizationCodeAllowed;
+  private boolean refreshTokenAllowed;
   private boolean implicitGrantAllowed;
   private boolean clientCredentialsAllowed;
 

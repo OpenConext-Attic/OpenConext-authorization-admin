@@ -10,7 +10,7 @@ import static java.net.URLEncoder.encode;
 
 public class ClientDetailsWrapper {
 
-  private static final SimpleGrantedAuthority ROLE_TOKEN_CHECKER_AUTHORITY = new SimpleGrantedAuthority(WebApplication.ROLE_TOKEN_CHECKER);
+  public static final SimpleGrantedAuthority ROLE_TOKEN_CHECKER_AUTHORITY = new SimpleGrantedAuthority(WebApplication.ROLE_TOKEN_CHECKER);
 
   private final boolean mutable;
   private final ClientDetails clientDetails;

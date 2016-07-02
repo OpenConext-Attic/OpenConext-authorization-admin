@@ -62,7 +62,9 @@ public class IndexController extends BaseController implements ApplicationListen
       .map(client -> new ClientDetailsWrapper(client, isMutable(client.getClientId())))
       .filter(filter)
       .collect(Collectors.toList());
-    return new ModelAndView(viewName, "clients", wrappedClients);
+    ModelAndView model = new ModelAndView(viewName, "clients", wrappedClients);
+    model.addObject("viewName", viewName);
+    return model;
   }
 
   @RequestMapping(value = "/forbidden")

@@ -1,32 +1,25 @@
 package authzadmin.web;
 
 import authzadmin.OauthClientDetails;
-import authzadmin.OauthSettings;
+import authzadmin.model.ClientValidator;
+import authzadmin.model.OauthSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientAlreadyExistsException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.UUID;
 
 import static java.net.URLDecoder.decode;
-import static java.util.stream.Collectors.toList;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -35,6 +28,8 @@ public class ClientController extends BaseController {
 
   @Autowired
   private ClientRegistrationService clientRegistrationService;
+
+  private ClientValidator clientValidator = new ClientValidator();
 
   @RequestMapping(value = "/create", method = GET)
   public ModelAndView get(OauthSettings oauthSettings) {
@@ -52,7 +47,7 @@ public class ClientController extends BaseController {
 
   @RequestMapping(value = "/create", method = POST)
   public String post(@Valid OauthSettings oauthSettings, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    if (hasErrors(oauthSettings, bindingResult)) {
+    if (clientValidator.hasErrors(oauthSettings, bindingResult)) {
       return oauthSettings.isResourceServer() ? "create-resource-server" : "create";
     }
     try {
@@ -62,7 +57,7 @@ public class ClientController extends BaseController {
         }
       );
       notice(redirectAttributes, "create.success");
-      return "redirect:/";
+      return oauthSettings.isResourceServer() ? "redirect:/resource-servers" : "redirect:/clients";
     } catch (ClientAlreadyExistsException e) {
       bindingResult.rejectValue("consumerKey", "create.clientAlreadyExists");
       return oauthSettings.isResourceServer() ? "create-resource-server" : "create";
@@ -70,24 +65,25 @@ public class ClientController extends BaseController {
   }
 
   @RequestMapping(value = "/clients/{id}/edit", method = POST)
-  public ModelAndView edit(@PathVariable(value = "id") String id, OauthSettings oauthSettings) throws UnsupportedEncodingException {
-    String decodedId = decode(id, "UTF-8");
-    ClientDetails clientDetails =
-      ((JdbcClientDetailsService) clientRegistrationService).loadClientByClientId(decodedId);
-    return new ModelAndView("create", "oauthSettings",  new OauthSettings(clientDetails));
+  public ModelAndView edit(@PathVariable(value = "id") String id) throws UnsupportedEncodingException {
+    return doEdit(id, "create");
   }
 
-  @RequestMapping(value = "/clients/{id}/edit", method = POST)
-  public ModelAndView editResourceServer(@PathVariable(value = "id") String id, OauthSettings oauthSettings) throws UnsupportedEncodingException {
+  @RequestMapping(value = "/clients/{id}/edit-resource-server", method = POST)
+  public ModelAndView editResourceServer(@PathVariable(value = "id") String id) throws UnsupportedEncodingException {
+    return doEdit(id, "create-resource-server");
+  }
+
+  private ModelAndView doEdit(String id, String viewName) throws UnsupportedEncodingException {
     String decodedId = decode(id, "UTF-8");
     ClientDetails clientDetails =
       ((JdbcClientDetailsService) clientRegistrationService).loadClientByClientId(decodedId);
-    return new ModelAndView("create-resource-server", "oauthSettings",  new OauthSettings(clientDetails));
+    return new ModelAndView(viewName, "oauthSettings",  new OauthSettings(clientDetails));
   }
 
   @RequestMapping(value = "/edit", method = POST)
   public String update(@Valid OauthSettings oauthSettings, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    if (hasErrors(oauthSettings, bindingResult)) {
+    if (clientValidator.hasErrors(oauthSettings, bindingResult)) {
       return oauthSettings.isResourceServer() ? "create-resource-server" : "create";
     }
     this.transactionTemplate.execute((transactionStatus) -> {
@@ -95,12 +91,12 @@ public class ClientController extends BaseController {
         return null;
       }
     );
-    notice(redirectAttributes, "edit.success");
-    return "redirect:/";
+    notice(redirectAttributes, oauthSettings.isResourceServer() ? "create-resource-server.success" : "edit.success");
+    return oauthSettings.isResourceServer() ? "redirect:/resource-servers" : "redirect:/clients";
   }
 
   @RequestMapping(value = "/clients/{id}/reset", method = POST)
-  public String post(@PathVariable String id, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
+  public String reset(@PathVariable String id, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
     String decoded = decode(id, "UTF-8");
     String newSecret = UUID.randomUUID().toString();
     transactionTemplate.execute(transactionStatus -> {
@@ -110,21 +106,6 @@ public class ClientController extends BaseController {
     );
     notice(redirectAttributes, "reset.success", newSecret);
     return "redirect:/";
-  }
-
-  private boolean hasErrors(OauthSettings oauthSettings, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      if (bindingResult.getFieldErrors().stream().anyMatch(err -> err.getField().startsWith("callbackUrls["))) {
-        bindingResult.rejectValue("callbackUrls", "create.callbackUrlsInvalid");
-      }
-      return true;
-    }
-    if ((oauthSettings.isAuthorizationCodeAllowed() || oauthSettings.isImplicitGrantAllowed())
-      && CollectionUtils.isEmpty(oauthSettings.getCallbackUrls())) {
-      bindingResult.rejectValue("callbackUrls", "create.callbackUrlsRequired");
-      return true;
-    }
-    return false;
   }
 
 }
