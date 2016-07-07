@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -99,7 +100,7 @@ public class ClientController extends BaseController {
   }
 
   @RequestMapping(value = "/clients/{id}/reset", method = POST)
-  public String reset(@PathVariable String id, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
+  public String reset(@PathVariable String id, RedirectAttributes redirectAttributes, HttpServletRequest request) throws UnsupportedEncodingException {
     String decoded = decode(id, "UTF-8");
     String newSecret = UUID.randomUUID().toString();
     transactionTemplate.execute(transactionStatus -> {
@@ -108,7 +109,8 @@ public class ClientController extends BaseController {
       }
     );
     notice(redirectAttributes, "reset.success", newSecret);
-    return "redirect:/clients";
+    String clientType = request.getParameter("client-type");
+    return clientType != null && clientType.equals("resource-servers") ? "redirect:/resource-servers" : "redirect:/clients";
   }
 
 }

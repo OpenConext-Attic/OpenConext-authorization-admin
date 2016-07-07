@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -21,7 +22,7 @@ public class DeleteController extends BaseController {
   private ClientRegistrationService clientRegistrationService;
 
   @RequestMapping(value = "/delete", method = POST)
-  public String post(@PathVariable String id, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
+  public String post(@PathVariable String id, RedirectAttributes redirectAttributes, HttpServletRequest request) throws UnsupportedEncodingException {
     String decoded = decode(id, "UTF-8");
     transactionTemplate.execute(transactionStatus -> {
         clientRegistrationService.removeClientDetails(decoded);
@@ -29,6 +30,7 @@ public class DeleteController extends BaseController {
       }
     );
     notice(redirectAttributes, "delete.success");
-    return "redirect:/clients";
+    String clientType = request.getParameter("client-type");
+    return clientType != null && clientType.equals("resource-servers") ? "redirect:/resource-servers" : "redirect:/clients";
   }
 }

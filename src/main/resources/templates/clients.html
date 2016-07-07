@@ -42,6 +42,7 @@
           <td>
             <form th:if="${client.mutable}" class="delete-client" th:action="@{/clients/{id}/delete(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
               <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <input name="client-type" type="hidden" value="clients"/>
               <div class="buttons">
                 <input type="submit" class="c-button" th:value="#{index.actions.delete}"/>
               </div>
@@ -54,6 +55,7 @@
             </form>
             <form th:if="${client.mutable}" class="reset-secret" th:action="@{/clients/{id}/reset(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">
               <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <input name="client-type" type="hidden" value="clients"/>
               <div class="buttons">
                 <input type="submit" class="c-button" th:value="#{index.actions.reset}"/>
               </div>
