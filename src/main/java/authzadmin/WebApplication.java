@@ -85,7 +85,7 @@ public class WebApplication {
 
     @Override
     public void addViewControllers( ViewControllerRegistry registry ) {
-      registry.addViewController( "/" ).setViewName( "redirect:/clients.html" );
+      registry.addViewController( "/" ).setViewName( "redirect:/clients" );
       registry.setOrder( Ordered.HIGHEST_PRECEDENCE );
       super.addViewControllers( registry );
     }
