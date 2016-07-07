@@ -55,6 +55,11 @@ public class AbstractIntegrationTest {
     return numberOfRegistrations(true);
   }
 
+  protected ClientDetails findByClientId(String clientId) {
+    return clientRegistrationService.listClientDetails()
+      .stream().filter(details -> details.getClientId().equals(clientId)).collect(toList()).get(0);
+  }
+
   private int numberOfRegistrations(boolean resourceServer) {
     Map<Boolean, List<ClientDetails>> details = clientRegistrationService.listClientDetails()
       .stream()

@@ -35,7 +35,7 @@ public class OauthClientDetails extends BaseClientDetails {
     }
     if (oauthSettings.isResourceServer()) {
       setAuthorities(AuthorityUtils.createAuthorityList(ROLE_TOKEN_CHECKER));
-      setAuthorizedGrantTypes(Collections.emptyList());
+      setAuthorizedGrantTypes(Collections.singletonList("resource_server"));
     }
   }
 }

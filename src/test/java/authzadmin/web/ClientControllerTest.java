@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import static java.util.Collections.singleton;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -24,8 +27,10 @@ public class ClientControllerTest extends AbstractIntegrationTest {
 
   @Test
   public void createResourceServer() throws Exception {
+    String uuid = UUID.randomUUID().toString();
     doCreate(this::numberOfResourceServers, "resourceServer=true&consumerKey=%s&secret=%s&callbackUrls=http://localhost:8080&_callbackUrls=1&scopes=groups&_scopes=1&create-client=Save",
-      "resource-servers");
+      uuid, "resource-servers");
+    assertEquals(singleton("resource_server"), findByClientId(uuid).getAuthorizedGrantTypes());
   }
 
   @Test
@@ -81,12 +86,12 @@ public class ClientControllerTest extends AbstractIntegrationTest {
   @Test
   public void reset() throws Exception {
     String clientId = "authz-admin";
-    ClientDetails clientDetails = getClientDetails(clientId);
+    ClientDetails clientDetails = findByClientId(clientId);
 
     String secret = clientDetails.getClientSecret();
     ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/clients/" + clientId + "/reset", null, String.class);
 
-    clientDetails = getClientDetails(clientId);
+    clientDetails = findByClientId(clientId);
     assertNotEquals(secret, clientDetails.getClientSecret());
   }
 
@@ -106,21 +111,25 @@ public class ClientControllerTest extends AbstractIntegrationTest {
     assertEquals(302, response.getStatusCode().value());
     assertEquals("http://localhost:" + port + "/" + (isResourceServer ? "resource-servers" : "clients"), response.getHeaders().getLocation().toString());
 
-    ClientDetails clientDetails = getClientDetails(clientId);
+    ClientDetails clientDetails = findByClientId(clientId);
 
     Set<String> redirectUris = clientDetails.getRegisteredRedirectUri();
     assertEquals(1, redirectUris.size());
     assertEquals(redirectUri, redirectUris.iterator().next());
-  }
 
-  private ClientDetails getClientDetails(String clientId) {
-    return clientRegistrationService.listClientDetails().stream().filter(client -> client.getClientId().equals(clientId)).findAny().get();
+    if (isResourceServer) {
+      assertEquals(singleton("resource_server"), clientDetails.getAuthorizedGrantTypes());
+    }
   }
 
   private void doCreate(Supplier<Integer> numberOfClients, String params, final String redirect) {
-    int currentClients = numberOfClients.get();
     String uuid = UUID.randomUUID().toString();
-    MultiValueMap<String, String> map = formMap(params, uuid, uuid);
+    doCreate(numberOfClients, params, uuid, redirect);
+  }
+
+  private void doCreate(Supplier<Integer> numberOfClients, String params, String clientId, String redirect) {
+    int currentClients = numberOfClients.get();
+    MultiValueMap<String, String> map = formMap(params, clientId, clientId);
 
     ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/create", map, String.class);
 

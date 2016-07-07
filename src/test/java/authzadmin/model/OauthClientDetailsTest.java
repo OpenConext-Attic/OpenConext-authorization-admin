@@ -51,7 +51,7 @@ public class OauthClientDetailsTest {
     Collection<GrantedAuthority> authorities = detail.getAuthorities();
     assertEquals(1, authorities.size());
     assertEquals(ROLE_TOKEN_CHECKER, authorities.iterator().next().getAuthority());
-    assertTrue(detail.getAuthorizedGrantTypes().isEmpty());
+    assertTrue(detail.getAuthorizedGrantTypes().equals(new HashSet<>(Collections.singleton("resource_server"))));
   }
 
 }
