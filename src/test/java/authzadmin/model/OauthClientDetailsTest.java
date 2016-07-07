@@ -23,7 +23,7 @@ public class OauthClientDetailsTest {
   @Test
   public void test_is_client_credentials_allowed() {
     oauthSettings.setClientCredentialsAllowed(true);
-    OauthClientDetails detail = new OauthClientDetails( oauthSettings);
+    OauthClientDetails detail = new OauthClientDetails(oauthSettings);
     assertTrue(detail.getAuthorizedGrantTypes().contains(CLIENT_CREDENTIALS));
   }
 
@@ -31,14 +31,14 @@ public class OauthClientDetailsTest {
   public void test_has_scopes() {
     List<Scope> scopes = Arrays.asList(new Scope("read"), new Scope("write"));
     oauthSettings.setScopes(scopes);
-    OauthClientDetails detail = new OauthClientDetails( oauthSettings);
-    assertTrue(detail.getScope().equals(new TreeSet<>(Arrays.asList("read","write"))));
+    OauthClientDetails detail = new OauthClientDetails(oauthSettings);
+    assertTrue(detail.getScope().equals(new TreeSet<>(Arrays.asList("read", "write"))));
   }
 
   @Test
   public void test_is_auto_approve() {
     oauthSettings.setAutoApprove(true);
-    OauthClientDetails detail = new OauthClientDetails( oauthSettings);
+    OauthClientDetails detail = new OauthClientDetails(oauthSettings);
     Set<String> autoApproveScopes = detail.getAutoApproveScopes();
     assertEquals(1, autoApproveScopes.size());
     assertEquals(AUTO_APPROVE_SCOPE, autoApproveScopes.iterator().next());
@@ -47,7 +47,7 @@ public class OauthClientDetailsTest {
   @Test
   public void test_is_resource_server() {
     oauthSettings.setResourceServer(true);
-    OauthClientDetails detail = new OauthClientDetails( oauthSettings);
+    OauthClientDetails detail = new OauthClientDetails(oauthSettings);
     Collection<GrantedAuthority> authorities = detail.getAuthorities();
     assertEquals(1, authorities.size());
     assertEquals(ROLE_TOKEN_CHECKER, authorities.iterator().next().getAuthority());
