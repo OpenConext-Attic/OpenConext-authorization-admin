@@ -41,18 +41,16 @@ public class OauthSettings {
 
   @Valid
   private List<Scope> scopes = new ArrayList<>();
+
+  @Valid
+  private List<ResourceId> resourceIds = new ArrayList<>();
+
   private boolean newClient = true;
 
   /**
    * Needed for Spring form binding.
    */
   public OauthSettings() {
-  }
-
-  public OauthSettings(String secret, String consumerKey, String callbackUrl) {
-    this.secret = secret;
-    this.consumerKey = consumerKey;
-    this.callbackUrls = Arrays.asList(new RedirectURI(callbackUrl));
   }
 
   public OauthSettings(ClientDetails clientDetails) {
@@ -62,6 +60,8 @@ public class OauthSettings {
     this.callbackUrls = isEmpty(registeredRedirectUri) ? null : registeredRedirectUri.stream().map(RedirectURI::new).collect(toList());
     Set<String> scopes = clientDetails.getScope();
     this.scopes = isEmpty(scopes) ? null : scopes.stream().map(Scope::new).collect(toList());
+    Set<String> resourceIds = clientDetails.getResourceIds();
+    this.resourceIds = isEmpty(resourceIds) ? null : resourceIds.stream().map(ResourceId::new).collect(toList());
     this.autoApprove = clientDetails.isAutoApprove("auto");
     Collection<GrantedAuthority> authorities = clientDetails.getAuthorities();
     this.resourceServer = isEmpty(authorities) ? false : authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_TOKEN_CHECKER));
@@ -69,7 +69,7 @@ public class OauthSettings {
     this.refreshTokenAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.REFRESH_TOKEN);
     this.implicitGrantAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.IMPLICIT);
     this.clientCredentialsAllowed = clientDetails.getAuthorizedGrantTypes().contains(WebApplication.CLIENT_CREDENTIALS);
-    newClient = false;
+    this.newClient = false;
   }
 
   public String getConsumerKey() {
@@ -127,6 +127,14 @@ public class OauthSettings {
 
   public void setScopes(List<Scope> scopes) {
     this.scopes = scopes;
+  }
+
+  public List<ResourceId> getResourceIds() {
+    return resourceIds;
+  }
+
+  public void setResourceIds(List<ResourceId> resourceIds) {
+    this.resourceIds = resourceIds;
   }
 
   public boolean isNewClient() {

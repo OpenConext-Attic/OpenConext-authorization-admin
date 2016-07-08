@@ -19,6 +19,7 @@
           <th th:text="#{index.scopes}">SCOPES</th>
           <th th:text="#{index.autoApprove}">AUTO_APPROVE</th>
           <th th:text="#{index.grantTypes}">GRANT_TYPES</th>
+          <th th:text="#{index.resourceIds}">RESOURCE_IDS</th>
           <th class="client-actions" th:text="#{index.actions}">ACTIONS</th>
         </tr>
         </thead>
@@ -38,6 +39,9 @@
           </td>
           <td th:text="${client.clientDetails.authorizedGrantTypes}">
             GRANT_TYPES
+          </td>
+          <td th:text="${client.clientDetails.resourceIds}">
+            RESOURCE_IDS
           </td>
           <td>
             <form th:if="${client.mutable}" class="delete-client" th:action="@{/clients/{id}/delete(id=${client.clientIdEncoded})}" method="post" th:attr="data-client=${client.clientDetails.clientId}">

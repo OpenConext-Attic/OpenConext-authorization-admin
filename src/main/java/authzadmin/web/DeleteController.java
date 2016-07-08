@@ -29,8 +29,9 @@ public class DeleteController extends BaseController {
         return null;
       }
     );
-    notice(redirectAttributes, "delete.success");
     String clientType = request.getParameter("client-type");
-    return clientType != null && clientType.equals("resource-servers") ? "redirect:/resource-servers" : "redirect:/clients";
+    boolean isResourceServer = clientType != null && clientType.equals("resource-servers");
+    notice(redirectAttributes, isResourceServer ? "delete-resource-server.success" : "delete.success" );
+    return isResourceServer ? "redirect:/resource-servers" : "redirect:/clients";
   }
 }

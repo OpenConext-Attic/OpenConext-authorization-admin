@@ -3,16 +3,15 @@ package authzadmin.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class Scope implements ValueHolder{
+public class ResourceId implements ValueHolder{
 
   @NotNull
-  @Pattern(regexp = "^[a-zA-Z0-9_-]*$")
   private String value;
 
-  public Scope() {
+  public ResourceId() {
   }
 
-  public Scope(String value) {
+  public ResourceId(String value) {
     this.value = value;
   }
 
@@ -29,9 +28,9 @@ public class Scope implements ValueHolder{
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    Scope scope = (Scope) o;
+    ResourceId resourceId = (ResourceId) o;
 
-    if (value != null ? !value.equals(scope.value) : scope.value != null) return false;
+    if (value != null ? !value.equals(resourceId.value) : resourceId.value != null) return false;
 
     return true;
   }

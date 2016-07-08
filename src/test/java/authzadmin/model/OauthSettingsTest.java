@@ -6,10 +6,13 @@ import org.junit.Test;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 import static authzadmin.WebApplication.*;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 public class OauthSettingsTest {
@@ -24,7 +27,11 @@ public class OauthSettingsTest {
   }
 
   private OauthSettings oauthSettings() {
-    return new OauthSettings("secret", "consumerKey", "http://localhost:8080");
+    oauthSettings = new OauthSettings();
+    oauthSettings.setSecret("secret");
+    oauthSettings.setConsumerKey( "consumerKey");
+    oauthSettings.setCallbackUrls(singletonList(new RedirectURI("http://localhost:8080")));
+    return oauthSettings;
   }
 
   @Test

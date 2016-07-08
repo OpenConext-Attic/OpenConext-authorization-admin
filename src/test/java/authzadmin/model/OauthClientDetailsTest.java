@@ -9,6 +9,7 @@ import java.util.*;
 
 import static authzadmin.OauthClientDetails.AUTO_APPROVE_SCOPE;
 import static authzadmin.WebApplication.*;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
 public class OauthClientDetailsTest {
@@ -17,7 +18,10 @@ public class OauthClientDetailsTest {
 
   @Before
   public void before() {
-    oauthSettings = new OauthSettings("secret", "client_id", "http://ignore");
+    oauthSettings = new OauthSettings();
+    oauthSettings.setSecret("secret");
+    oauthSettings.setConsumerKey( "client_id");
+    oauthSettings.setCallbackUrls(singletonList(new RedirectURI("http://ignore")));
   }
 
   @Test

@@ -196,15 +196,13 @@ input, select {
     padding-left: 30px;
     right: 0; }
   .l-center .l-middle {
-    padding: 30px;
-    padding-right: 300px;
-    padding-left: 200px;
+    padding: 30px 300px 30px 200px;
     margin-left: auto;
     margin-right: auto; }
 
 .l-mini {
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 1800px;
   padding: 30px;
   position: relative; }
   .l-mini:after {

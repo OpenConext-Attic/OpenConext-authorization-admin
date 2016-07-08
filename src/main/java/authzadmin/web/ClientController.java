@@ -60,7 +60,7 @@ public class ClientController extends BaseController {
           return null;
         }
       );
-      notice(redirectAttributes, "create.success");
+      notice(redirectAttributes, oauthSettings.isResourceServer() ? "create-resource-server.success" : "create.success");
       return oauthSettings.isResourceServer() ? "redirect:/resource-servers" : "redirect:/clients";
     } catch (ClientAlreadyExistsException e) {
       bindingResult.rejectValue("consumerKey", "create.clientAlreadyExists");
@@ -70,19 +70,10 @@ public class ClientController extends BaseController {
 
   @RequestMapping(value = "/clients/{id}/edit", method = POST)
   public ModelAndView edit(@PathVariable(value = "id") String id) throws UnsupportedEncodingException {
-    return doEdit(id, "create");
-  }
-
-  @RequestMapping(value = "/clients/{id}/edit-resource-server", method = POST)
-  public ModelAndView editResourceServer(@PathVariable(value = "id") String id) throws UnsupportedEncodingException {
-    return doEdit(id, "create-resource-server");
-  }
-
-  private ModelAndView doEdit(String id, String viewName) throws UnsupportedEncodingException {
     String decodedId = decode(id, "UTF-8");
     ClientDetails clientDetails =
       ((JdbcClientDetailsService) clientRegistrationService).loadClientByClientId(decodedId);
-    return new ModelAndView(viewName, "oauthSettings",  new OauthSettings(clientDetails));
+    return new ModelAndView("create", "oauthSettings",  new OauthSettings(clientDetails));
   }
 
   @RequestMapping(value = "/edit", method = POST)
@@ -95,8 +86,8 @@ public class ClientController extends BaseController {
         return null;
       }
     );
-    notice(redirectAttributes, oauthSettings.isResourceServer() ? "create-resource-server.success" : "edit.success");
-    return oauthSettings.isResourceServer() ? "redirect:/resource-servers" : "redirect:/clients";
+    notice(redirectAttributes, "edit.success");
+    return "redirect:/clients";
   }
 
   @RequestMapping(value = "/clients/{id}/reset", method = POST)

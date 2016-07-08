@@ -16,6 +16,10 @@ public class ClientValidator {
       }
       result = true;
     }
+    if (CollectionUtils.isEmpty(oauthSettings.getResourceIds()) && !oauthSettings.isResourceServer()) {
+      bindingResult.rejectValue("resourceIds", "create.resourceIdsRequired");
+      result = true;
+    }
     if ((oauthSettings.isAuthorizationCodeAllowed() || oauthSettings.isImplicitGrantAllowed())
       && CollectionUtils.isEmpty(oauthSettings.getCallbackUrls())) {
       bindingResult.rejectValue("callbackUrls", "create.callbackUrlsRequired");

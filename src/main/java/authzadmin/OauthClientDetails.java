@@ -1,17 +1,18 @@
 package authzadmin;
 
-import authzadmin.model.OauthSettings;
+import authzadmin.model.*;
 import authzadmin.model.RedirectURI;
-import authzadmin.model.Scope;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static authzadmin.WebApplication.ROLE_TOKEN_CHECKER;
+import static java.util.stream.Collectors.toList;
 
 public class OauthClientDetails extends BaseClientDetails {
 
@@ -23,11 +24,11 @@ public class OauthClientDetails extends BaseClientDetails {
   public OauthClientDetails(OauthSettings oauthSettings) {
     super(
       oauthSettings.getConsumerKey(),
-      null,
-      CollectionUtils.isEmpty(oauthSettings.getScopes()) ? null : StringUtils.collectionToCommaDelimitedString(oauthSettings.getScopes().stream().map(Scope::getValue).collect(Collectors.toList())),
+      collectionToCommaDelimitedValue(oauthSettings.getResourceIds()),
+      collectionToCommaDelimitedValue(oauthSettings.getScopes()),
       oauthSettings.grantTypes(),
       null,
-      CollectionUtils.isEmpty(oauthSettings.getCallbackUrls()) ? null : StringUtils.collectionToCommaDelimitedString(oauthSettings.getCallbackUrls().stream().map(RedirectURI::getValue).collect(Collectors.toList()))
+      collectionToCommaDelimitedValue(oauthSettings.getCallbackUrls())
     );
     setClientSecret(oauthSettings.getSecret());
     if (oauthSettings.isAutoApprove()) {
@@ -37,5 +38,9 @@ public class OauthClientDetails extends BaseClientDetails {
       setAuthorities(AuthorityUtils.createAuthorityList(ROLE_TOKEN_CHECKER));
       setAuthorizedGrantTypes(Collections.singletonList("resource_server"));
     }
+  }
+
+  private static String collectionToCommaDelimitedValue(Collection<? extends ValueHolder> valueHolders) {
+    return CollectionUtils.isEmpty(valueHolders) ? null : StringUtils.collectionToCommaDelimitedString(valueHolders.stream().map(ValueHolder::getValue).collect(toList()));
   }
 }

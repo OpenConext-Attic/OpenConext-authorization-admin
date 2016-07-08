@@ -21,7 +21,7 @@ public class ClientControllerTest extends AbstractIntegrationTest {
 
   @Test
   public void createClient() throws Exception {
-    doCreate(this::numberOfClients, "resourceServer=false&consumerKey=%s&secret=%s&callbackUrls=http://localhost:8080&_callbackUrls=1&scopes=groups&_scopes=1&_autoApprove=on&authorizationCodeAllowed=true&_authorizationCodeAllowed=on&refreshTokenAllowed=true&_refreshTokenAllowed=on&_implicitGrantAllowed=on&_clientCredentialsAllowed=on&create-client=Save",
+    doCreate(this::numberOfClients, "resourceServer=false&consumerKey=%s&secret=%s&callbackUrls=http://localhost:8080&_callbackUrls=1&scopes=groups&_scopes=1&resourceIds=groups&_resourceIds=1&_autoApprove=on&authorizationCodeAllowed=true&_authorizationCodeAllowed=on&refreshTokenAllowed=true&_refreshTokenAllowed=on&_implicitGrantAllowed=on&_clientCredentialsAllowed=on&create-client=Save",
       "clients");
   }
 
@@ -75,12 +75,25 @@ public class ClientControllerTest extends AbstractIntegrationTest {
 
   @Test
   public void editClient() throws Exception {
-    doEditClient("authz-admin", false);
-  }
+    ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/clients/authz-admin/edit", null, String.class);
 
-  @Test
-  public void editResourceServer() throws Exception {
-    doEditClient("vootservice", true);
+    assertTrue(response.getBody().contains("<input type=\"text\" class=\"large\" readonly=\"readonly\" id=\"consumerKey\" name=\"consumerKey\" value=\"authz-admin\" />"));
+
+    String redirectUri = "http://localhost/changed";
+    MultiValueMap<String, String> map = formMap(
+      "resourceServer=%s&consumerKey=%s&secret=secret&callbackUrls=%s&_callbackUrls=1&scopes=groups&_scopes=1&resourceIds=groups&_resourceIds=1&_autoApprove=on&authorizationCodeAllowed=true&_authorizationCodeAllowed=on&refreshTokenAllowed=true&_refreshTokenAllowed=on&_implicitGrantAllowed=on&_clientCredentialsAllowed=on&create-client=Save"
+      , false, "authz-admin", redirectUri);
+
+    response = restTemplate.postForEntity("http://localhost:" + port + "/edit", map, String.class);
+
+    assertEquals(302, response.getStatusCode().value());
+    assertEquals("http://localhost:" + port + "/clients", response.getHeaders().getLocation().toString());
+
+    ClientDetails clientDetails = findByClientId("authz-admin");
+
+    Set<String> redirectUris = clientDetails.getRegisteredRedirectUri();
+    assertEquals(1, redirectUris.size());
+    assertEquals(redirectUri, redirectUris.iterator().next());
   }
 
   @Test
@@ -90,36 +103,10 @@ public class ClientControllerTest extends AbstractIntegrationTest {
 
     String secret = clientDetails.getClientSecret();
     ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/clients/" + clientId + "/reset", null, String.class);
+    assertEquals("http://localhost:" + port + "/clients", response.getHeaders().getLocation().toString());
 
     clientDetails = findByClientId(clientId);
     assertNotEquals(secret, clientDetails.getClientSecret());
-  }
-
-  private void doEditClient(String clientId, Boolean isResourceServer) {
-    String edit = isResourceServer ? "/edit" : "/edit-resource-server";
-    ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/clients/" + clientId + edit, null, String.class);
-
-    assertTrue(response.getBody().contains("<input type=\"text\" class=\"large\" readonly=\"readonly\" id=\"consumerKey\" name=\"consumerKey\" value=\"" + clientId + "\" />"));
-
-    String redirectUri = "http://localhost/changed";
-    MultiValueMap<String, String> map = formMap(
-      "resourceServer=%s&consumerKey=%s&secret=secret&callbackUrls=%s&_callbackUrls=1&scopes=groups&_scopes=1&_autoApprove=on&authorizationCodeAllowed=true&_authorizationCodeAllowed=on&refreshTokenAllowed=true&_refreshTokenAllowed=on&_implicitGrantAllowed=on&_clientCredentialsAllowed=on&create-client=Save"
-      , isResourceServer.toString(), clientId, redirectUri);
-
-    response = restTemplate.postForEntity("http://localhost:" + port + "/edit", map, String.class);
-
-    assertEquals(302, response.getStatusCode().value());
-    assertEquals("http://localhost:" + port + "/" + (isResourceServer ? "resource-servers" : "clients"), response.getHeaders().getLocation().toString());
-
-    ClientDetails clientDetails = findByClientId(clientId);
-
-    Set<String> redirectUris = clientDetails.getRegisteredRedirectUri();
-    assertEquals(1, redirectUris.size());
-    assertEquals(redirectUri, redirectUris.iterator().next());
-
-    if (isResourceServer) {
-      assertEquals(singleton("resource_server"), clientDetails.getAuthorizedGrantTypes());
-    }
   }
 
   private void doCreate(Supplier<Integer> numberOfClients, String params, final String redirect) {
