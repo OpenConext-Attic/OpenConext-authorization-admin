@@ -35,7 +35,7 @@
                 </ul>
                 <div>
                   <span th:each="callbackUrl: ${oauthSettings.callbackUrls}" class="tag c-button"
-                        th:attr="data-value=${callbackUrl.value}">
+                        th:attr="data-value=${callbackUrl.value}" th:attrappend="data-type=callbackUrl-name">
                     <span th:text="${callbackUrl.value}">tst</span><a href="#">x</a></span>
                   <input type="text" id="callbackUrl-name" class="large"/>
                 </div>
@@ -57,7 +57,7 @@
                 </ul>
                 <div>
                   <span th:each="resourceId: ${oauthSettings.resourceIds}" class="tag c-button"
-                        th:attr="data-value=${resourceId.value}">
+                        th:attr="data-value=${resourceId.value}" th:attrappend="data-type=resourceId-name">
                     <span th:text="${resourceId.value}">tst</span><a href="#">x</a></span>
                   <input type="text" id="resourceId-name" class="large"/>
                 </div>
@@ -79,7 +79,7 @@
                 </ul>
                 <div>
                   <span th:each="scope: ${oauthSettings.scopes}" class="tag c-button"
-                        th:attr="data-value=${scope.value}">
+                        th:attr="data-value=${scope.value}" th:attrappend="data-type=scope-name">
                     <span th:text="${scope.value}">tst</span><a href="#">x</a></span>
                   <input type="text" id="scope-name" class="large"/>
                 </div>
