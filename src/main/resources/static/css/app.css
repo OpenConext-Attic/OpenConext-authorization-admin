@@ -4,19 +4,24 @@
   border-radius: 5px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); }
 
+
 .z2 {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4); }
 
+
 .padding {
   padding: 2rem; }
+
 
 .v-center {
   display: table;
   width: 100%;
   height: 100%; }
+  
   .v-center .inner {
     display: table-cell;
     vertical-align: middle; }
+
 
 .h-center {
   margin-left: auto;
@@ -89,6 +94,7 @@ input, select {
 
 .mod-clients table {
   width: 100%; }
+
 .mod-clients th, .mod-clients td {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   line-height: 20px;
@@ -97,9 +103,10 @@ input, select {
     padding-left: 30px; }
   .mod-clients th:last-child, .mod-clients td:last-child {
     padding-right: 30px; }
-.mod-clients tbody tr:last-child td,
-.mod-clients tbody tr:last-child th {
+
+.mod-clients tbody tr:last-child td, .mod-clients tbody tr:last-child th {
   border: 0; }
+
 .mod-clients th {
   padding: 15px 20px; }
   .mod-clients th a {
@@ -110,57 +117,79 @@ input, select {
       text-decoration: underline; }
       .mod-clients th a:hover .fa {
         color: #4DB3CF; }
+
 .mod-clients .fa {
   color: #a2a2a2;
   padding: 0 15px; }
   .mod-clients .fa.fa-sort-asc, .mod-clients .fa.fa-sort-desc {
     color: #4DB3CF; }
-.mod-clients .date,
-.mod-clients .number,
-.mod-clients .right {
+
+.mod-clients .date, .mod-clients .number, .mod-clients .right {
   text-align: right; }
+
 .mod-clients .yes {
   color: #95b926; }
+
 .mod-clients .no {
   color: #dd3939; }
+
 .mod-clients .percent_5 {
   width: 5%; }
+
 .mod-clients .percent_10 {
   width: 10%; }
+
 .mod-clients .percent_15 {
   width: 15%; }
+
 .mod-clients .percent_20 {
   width: 20%; }
+
 .mod-clients .percent_25 {
   width: 25%; }
+
 .mod-clients .percent_30 {
   width: 30%; }
+
 .mod-clients .percent_35 {
   width: 35%; }
+
 .mod-clients .percent_40 {
   width: 40%; }
+
 .mod-clients .percent_45 {
   width: 45%; }
+
 .mod-clients .percent_50 {
   width: 50%; }
+
 .mod-clients .percent_55 {
   width: 55%; }
+
 .mod-clients .percent_60 {
   width: 60%; }
+
 .mod-clients .percent_65 {
   width: 65%; }
+
 .mod-clients .percent_70 {
   width: 70%; }
+
 .mod-clients .percent_75 {
   width: 75%; }
+
 .mod-clients .percent_80 {
   width: 80%; }
+
 .mod-clients .percent_85 {
   width: 85%; }
+
 .mod-clients .percent_90 {
   width: 90%; }
+
 .mod-clients .percent_95 {
   width: 95%; }
+
 .mod-clients .percent_100 {
   width: 100%; }
 
@@ -250,6 +279,7 @@ body {
 
 form input {
   margin-bottom: 5px; }
+
 form input[type=text] {
   font-size: 20px;
   padding: 5px; }
@@ -257,20 +287,26 @@ form input[type=text] {
     border: solid 1px #dd3939; }
     form input[type=text].field-error:focus {
       outline-color: #dd3939; }
+
 form input[readonly=readonly] {
   color: #a2a2a2; }
+
 form ul li.field-error {
   list-style: none;
   color: #dd3939;
   line-height: 20px;
   padding: 5px; }
+
 form .buttons {
   margin: 22px 0px 0px 0px; }
+
 form input.large {
   width: 100%; }
+
 form em.tip {
   display: block;
   font-size: smaller; }
+
 form div.checkbox-element {
   margin: 5px 0px; }
 
@@ -343,6 +379,7 @@ form div.checkbox-element {
 
 .mod-createclient h1 {
   margin-bottom: 20px; }
+
 .mod-createclient .createclient-container {
   padding: 40px;
   position: relative; }
@@ -366,6 +403,7 @@ form div.checkbox-element {
 
 .mod-clients h1 {
   margin-bottom: 20px; }
+
 .mod-clients table {
   margin-top: 10px; }
   .mod-clients table th {
@@ -406,5 +444,3 @@ a.c-button {
 input[type=submit].c-button, button.c-button {
   border: none;
   font-size: 100%; }
-
-/*# sourceMappingURL=application.css.map */

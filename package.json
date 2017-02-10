@@ -1,0 +1,24 @@
+{
+  "name": "authorization-admin",
+  "version": "1.0.0",
+  "description": "[![Build Status](https://travis-ci.org/OpenConext/OpenConext-authorization-admin.svg)](https://travis-ci.org/OpenConext/OpenConext-attribute-mapper) [![codecov.io](https://codecov.io/github/OpenConext/OpenConext-attribute-mapper/coverage.svg)](https://codecov.io/github/OpenConext/OpenConext-authorization-admin)",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "node-sass src/main/sass/application.sass src/main/resources/static/css/app.css",
+    "watch-scss": "nodemon -e scss -x \"npm run build-css\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenConext/OpenConext-authorization-admin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OpenConext/OpenConext-authorization-admin/issues"
+  },
+  "homepage": "https://github.com/OpenConext/OpenConext-authorization-admin#readme",
+  "devDependencies": {
+    "node-sass": "^4.5.0",
+    "nodemon": "^1.11.0"
+  }
+}

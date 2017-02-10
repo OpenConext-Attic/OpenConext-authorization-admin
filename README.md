@@ -29,18 +29,13 @@ Or use the shortcut:
 
 `./start.sh`
 
-We use sass to ease the pain of CSS development. We recommend you install sass using ruby. Best is to manage your rubies
-with [rbenv](https://github.com/sstephenson/rbenv). After installing rbenv ```cd``` into this directory and run:
+We use sass to ease the pain of CSS development:
 
-    gem install sass
+    npm install
 
 Then run
 
-    sass --watch src/main/sass/application.sass:src/main/resources/static/css/application.css
-
-Or use the shortcut:
-
-    ./watch.sh
+    npm run watch-scss
 
 ## Production
 

@@ -20,3 +20,5 @@ target/
 
 # SASS
 .sass-cache
+
+node_modules
