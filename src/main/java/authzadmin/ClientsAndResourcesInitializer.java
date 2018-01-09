@@ -37,6 +37,7 @@ public class ClientsAndResourcesInitializer implements ApplicationListener<Conte
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void onApplicationEvent(ContextRefreshedEvent event) {
     LOG.debug("Initializing default oAuth clients and resource-servers from {}", resource);
     try {

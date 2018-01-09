@@ -3,16 +3,15 @@ package authzadmin;
 import authzadmin.shibboleth.ShibbolethPreAuthenticatedProcessingFilter;
 import authzadmin.shibboleth.ShibbolethUserDetailService;
 import authzadmin.shibboleth.mock.MockShibbolethFilter;
-import authzadmin.voot.EnsureAccessFilter;
-import authzadmin.voot.VootClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +20,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.AccessTokenRequest;
 import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -37,13 +35,7 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(ShibbolethSecurityConfig.class);
 
   @Autowired
-  private VootClient vootClient;
-
-  @Autowired
   private Environment environment;
-
-  @Value("${allowed_group}")
-  private String allowedGroup;
 
   @Bean
   @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
@@ -90,13 +82,6 @@ public class ShibbolethSecurityConfig extends WebSecurityConfigurerAdapter {
       .addFilterBefore(
         new ShibbolethPreAuthenticatedProcessingFilter(authenticationManagerBean()),
         AbstractPreAuthenticatedProcessingFilter.class
-      )
-      .addFilterBefore(
-        new EnsureAccessFilter(
-          vootClient, allowedGroup), ShibbolethPreAuthenticatedProcessingFilter.class
-      )
-      .addFilterBefore(
-        new OAuth2ClientContextFilter(), EnsureAccessFilter.class
       )
       .authorizeRequests().anyRequest().authenticated();
 

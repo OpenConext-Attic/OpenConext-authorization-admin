@@ -37,9 +37,6 @@ public class IndexController extends BaseController implements ApplicationListen
   private ResourceLoader resourceLoader;
 
 
-  @Value("${allowed_group}")
-  private String allowedGroup;
-
   private List<String> immutableClientIds = new ArrayList<>();
 
   @Autowired
@@ -69,7 +66,7 @@ public class IndexController extends BaseController implements ApplicationListen
 
   @RequestMapping(value = "/forbidden")
   public ModelAndView forbidden() {
-    return new ModelAndView("forbidden", "allowedGroup", allowedGroup);
+    return new ModelAndView("forbidden");
   }
 
   @Override

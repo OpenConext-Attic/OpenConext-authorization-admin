@@ -11,7 +11,6 @@
 
     <div class="mod-error">
       <h1>Access denied</h1>
-      <p>You are not a member of the required group: <strong th:text="${allowedGroup}"></strong></p>
       <p th:text="#{error.emailMsg}"></p><a th:href="'mailto:' + ${@environment.getProperty('errorPage.email')}" th:text="${@environment.getProperty('errorPage.email')}"></a>
     </div>
 

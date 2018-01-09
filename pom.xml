@@ -5,7 +5,7 @@
 
   <groupId>org.openconext</groupId>
   <artifactId>authz-admin</artifactId>
-  <version>2.0.10</version>
+  <version>2.0.11</version>
   <packaging>jar</packaging>
 
   <name>OpenConext oauth2 admin</name>

@@ -32,6 +32,6 @@ public class IndexControllerTest extends AbstractIntegrationTest {
   public void testForbidden() throws Exception {
     ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/forbidden", String.class);
 
-    assertTrue(response.getBody().contains("urn:collab:group:example.org:authz-admins"));
+    assertTrue(response.getBody().contains("Access denied"));
   }
 }
