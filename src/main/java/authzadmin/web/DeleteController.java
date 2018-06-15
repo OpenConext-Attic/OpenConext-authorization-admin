@@ -4,6 +4,7 @@ import static java.net.URLDecoder.decode;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,8 @@ public class DeleteController extends BaseController {
   private ClientRegistrationService clientRegistrationService;
 
   @RequestMapping(value = "/delete", method = POST)
-  public String post(@PathVariable String id, RedirectAttributes redirectAttributes, HttpServletRequest request) throws UnsupportedEncodingException {
+  public String post(@PathVariable String id, RedirectAttributes redirectAttributes, HttpServletRequest request,
+                     Authentication authentication) throws UnsupportedEncodingException {
     String decoded = decode(id, "UTF-8");
     transactionTemplate.execute(transactionStatus -> {
         clientRegistrationService.removeClientDetails(decoded);
@@ -32,6 +34,7 @@ public class DeleteController extends BaseController {
     String clientType = request.getParameter("client-type");
     boolean isResourceServer = clientType != null && clientType.equals("resource-servers");
     notice(redirectAttributes, isResourceServer ? "delete-resource-server.success" : "delete.success" );
+    LOG.info("{} {} deleted by {}", isResourceServer ? "Resource Server" : "Client", id, authentication.getPrincipal());
     return isResourceServer ? "redirect:/resource-servers" : "redirect:/clients";
   }
 }

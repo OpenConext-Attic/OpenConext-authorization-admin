@@ -17,6 +17,6 @@ public class ScopeTest {
 
     assertEquals(s1, s2);
 
-    assertEquals(1, new HashSet(Arrays.asList(s1, s2)).size());
+    assertEquals(1, new HashSet<>(Arrays.asList(s1, s2)).size());
   }
 }

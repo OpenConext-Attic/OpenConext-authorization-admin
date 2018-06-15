@@ -3,126 +3,138 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-  <title th:text="#{welcome.title}"></title>
+    <title th:text="#{welcome.title}"></title>
 </head>
 <body>
 <div layout:fragment="content">
-  <div class="l-mini">
-    <div class="mod-createclient">
+    <div class="l-mini">
+        <div class="mod-createclient">
 
-      <h1 th:text="#{create.title}"></h1>
+            <h1 th:text="#{create.title}"></h1>
 
-      <div class="createclient-container">
-        <form name="add-service-provider" th:action="${oauthSettings.newClient ? '/create' : '/edit'}"
-              th:object="${oauthSettings}" method="post">
+            <div class="createclient-container">
+                <form name="add-service-provider" th:action="${oauthSettings.newClient ? '/create' : '/edit'}"
+                      th:object="${oauthSettings}" method="post">
 
-          <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-          <input type="hidden" th:field="*{resourceServer}"/>
-          <input type="hidden" th:field="*{newClient}"/>
+                    <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" th:field="*{resourceServer}"/>
+                    <input type="hidden" th:field="*{newClient}"/>
 
-          <div class="fields">
-            <div
-              th:include="forms :: textfield(fieldName=consumerKey, tip=na, readonly=__${!oauthSettings.newClient}__)"/>
-            <div th:if="${oauthSettings.newClient}"
-                 th:include="forms :: textfield(fieldName=secret, tip=secretTip, readonly=true)"/>
-            <div>
-              <label th:for="callbackUrls" th:text="#{create.form.callbackUrls}"></label>
-              <em class="tip">Press &lt;enter&gt; to add a redirect URI. A client can have multiple redirect URIs.</em>
-              <em class="tip">It is strongly recommended to register at least one redirect URI.</em>
-              <div>
-                <ul th:if="${#fields.hasErrors('callbackUrls')}">
-                  <li class="field-error" th:each="err : ${#fields.errors('callbackUrls')}" th:text="${err}"/>
-                </ul>
-                <div>
-                  <span th:each="callbackUrl: ${oauthSettings.callbackUrls}" class="tag c-button"
-                        th:attr="data-value=${callbackUrl.value}" th:attrappend="data-type=callbackUrl-name">
-                    <span th:text="${callbackUrl.value}">tst</span><a href="#">x</a></span>
-                  <input type="text" id="callbackUrl-name" class="large"/>
-                </div>
-                <select th:field="*{callbackUrls}" multiple="multiple" class="hidden">
-                  <option th:each="callbackUrl: ${oauthSettings.callbackUrls}" th:value="${{callbackUrl.value}}"
-                          th:text="${callbackUrl.value}">
-                    foo
-                  </option>
-                </select>
-              </div>
+                    <div class="fields">
+                        <div th:include="forms :: textfield(fieldName=consumerKey, tip=na, readonly=__${!oauthSettings.newClient}__)"/>
+                        <div th:if="${oauthSettings.newClient}"
+                             th:include="forms :: textfield(fieldName=secret, tip=secretTip, readonly=true)"/>
+                        <div>
+                            <label th:for="callbackUrls" th:text="#{create.form.callbackUrls}"></label>
+                            <em class="tip">Press &lt;enter&gt; to add a redirect URI. A client can have multiple
+                                redirect URIs.</em>
+                            <em class="tip">It is strongly recommended to register at least one redirect URI.</em>
+                            <div>
+                                <ul th:if="${#fields.hasErrors('callbackUrls')}">
+                                    <li class="field-error" th:each="err : ${#fields.errors('callbackUrls')}"
+                                        th:text="${err}"/>
+                                </ul>
+                                <div>
+                                    <span th:each="callbackUrl: ${oauthSettings.callbackUrls}" class="tag c-button"
+                                          th:attr="data-value=${callbackUrl.value}"
+                                          th:attrappend="data-type=callbackUrl-name">
+                                    <span th:text="${callbackUrl.value}">tst</span><a href="#">x</a></span>
+                                    <input type="text" id="callbackUrl-name" class="large"/>
+                                </div>
+                                <select th:field="*{callbackUrls}" multiple="multiple" class="hidden">
+                                    <option th:each="callbackUrl: ${oauthSettings.callbackUrls}"
+                                            th:value="${{callbackUrl.value}}"
+                                            th:text="${callbackUrl.value}">
+                                        foo
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label th:for="scopes" th:text="#{create.form.scopes}"></label>
+                            <em class="tip">Press &lt;enter&gt; to add a scope. A client can have multiple scopes.</em>
+
+                            <div>
+                                <ul th:if="${#fields.hasErrors('scopes')}">
+                                    <li class="field-error" th:each="err : ${#fields.errors('scopes')}"
+                                        th:text="${err}"/>
+                                </ul>
+                                <div>
+                                    <span th:each="scope: ${oauthSettings.scopes}" class="tag c-button"
+                                          th:attr="data-value=${scope.value}" th:attrappend="data-type=scope-name">
+                                    <span th:text="${scope.value}">tst</span><a href="#">x</a></span>
+                                    <input type="text" id="scope-name" class="large"/>
+                                </div>
+                                <select th:field="*{scopes}" multiple="multiple" class="hidden">
+                                    <option th:each="scope: ${oauthSettings.scopes}" th:value="${{scope.value}}"
+                                            th:text="${scope.value}">
+                                        foo
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-element">
+                        <input id="autoApprove" type="checkbox" th:field="*{autoApprove}"/>
+                        <label th:for="autoApprove" th:text="#{create.form.autoApprove}"></label>
+                    </div>
+                    <div>
+                        <label th:for="resourceIds" th:text="#{create.form.resourceIds}"></label>
+                        <em class="tip">Each client at least must have one (or more) resourceId identifying the access
+                            to Resoruce
+                            Servers.</em>
+                        <div>
+                            <ul th:if="${#fields.hasErrors('resourceIds')}">
+                                <li class="field-error" th:each="err : ${#fields.errors('resourceIds')}"
+                                    th:text="${err}"/>
+                            </ul>
+                            <div>
+                                <span th:each="resourceId: ${oauthSettings.resourceIds}" class="tag c-button"
+                                      th:attr="data-value=${resourceId.value}"
+                                      th:attrappend="data-type=resourceId-name">
+                                <span th:text="${resourceId.value}">tst</span><a href="#">x</a></span>
+                                <input type="text" id="resourceId-name" class="large"/>
+                            </div>
+                            <select th:field="*{resourceIds}" multiple="multiple" class="hidden">
+                                <option th:each="resourceId: ${oauthSettings.resourceIds}"
+                                        th:value="${{resourceId.value}}"
+                                        th:text="${resourceId.value}">
+                                    foo
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <ul th:if="${#fields.hasErrors('authorizationCodeAllowed')}">
+                        <li class="field-error" th:each="err : ${#fields.errors('authorizationCodeAllowed')}"
+                            th:text="${err}"/>
+                    </ul>
+                    <div class="checkbox-element">
+                        <input id="authorizationCodeAllowed" type="checkbox" th:field="*{authorizationCodeAllowed}"/>
+                        <label th:for="authorizationCodeAllowed"
+                               th:text="#{create.form.authorizationCodeAllowed}"></label>
+                    </div>
+                    <div class="checkbox-element">
+                        <input id="refreshTokenAllowed" type="checkbox" th:field="*{refreshTokenAllowed}"/>
+                        <label th:for="refreshTokenAllowed" th:text="#{create.form.refreshTokenAllowed}"></label>
+                    </div>
+                    <div class="checkbox-element">
+                        <input id="implicitGrantAllowed" type="checkbox" th:field="*{implicitGrantAllowed}"/>
+                        <label th:for="implicitGrantAllowed" th:text="#{create.form.implicitGrantAllowed}"></label>
+                    </div>
+                    <div class="checkbox-element">
+                        <input id="clientCredentialsAllowed" type="checkbox" th:field="*{clientCredentialsAllowed}"/>
+                        <label th:for="clientCredentialsAllowed"
+                               th:text="#{create.form.clientCredentialsAllowed}"></label>
+                    </div>
+                    <div class="buttons">
+                        <a href="/" class="c-button">Cancel</a>
+                        <input name="create-client" type="submit" class="c-button" value="Save"/>
+                    </div>
+                </form>
             </div>
-            <div>
-              <label th:for="resourceIds" th:text="#{create.form.resourceIds}"></label>
-              <em class="tip">Each client at least must have one (or more) resourceId identifying the access to Resoruce
-                Servers.</em>
-              <div>
-                <ul th:if="${#fields.hasErrors('resourceIds')}">
-                  <li class="field-error" th:each="err : ${#fields.errors('resourceIds')}" th:text="${err}"/>
-                </ul>
-                <div>
-                  <span th:each="resourceId: ${oauthSettings.resourceIds}" class="tag c-button"
-                        th:attr="data-value=${resourceId.value}" th:attrappend="data-type=resourceId-name">
-                    <span th:text="${resourceId.value}">tst</span><a href="#">x</a></span>
-                  <input type="text" id="resourceId-name" class="large"/>
-                </div>
-                <select th:field="*{resourceIds}" multiple="multiple" class="hidden">
-                  <option th:each="resourceId: ${oauthSettings.resourceIds}" th:value="${{resourceId.value}}"
-                          th:text="${resourceId.value}">
-                    foo
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label th:for="scopes" th:text="#{create.form.scopes}"></label>
-              <em class="tip">Press &lt;enter&gt; to add a scope. A client can have multiple scopes.</em>
+        </div>
 
-              <div>
-                <ul th:if="${#fields.hasErrors('scopes')}">
-                  <li class="field-error" th:each="err : ${#fields.errors('scopes')}" th:text="${err}"/>
-                </ul>
-                <div>
-                  <span th:each="scope: ${oauthSettings.scopes}" class="tag c-button"
-                        th:attr="data-value=${scope.value}" th:attrappend="data-type=scope-name">
-                    <span th:text="${scope.value}">tst</span><a href="#">x</a></span>
-                  <input type="text" id="scope-name" class="large"/>
-                </div>
-                <select th:field="*{scopes}" multiple="multiple" class="hidden">
-                  <option th:each="scope: ${oauthSettings.scopes}" th:value="${{scope.value}}" th:text="${scope.value}">
-                    foo
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="checkbox-element">
-            <input id="autoApprove" type="checkbox" th:field="*{autoApprove}"/>
-            <label th:for="autoApprove" th:text="#{create.form.autoApprove}"></label>
-          </div>
-          <ul th:if="${#fields.hasErrors('authorizationCodeAllowed')}">
-            <li class="field-error" th:each="err : ${#fields.errors('authorizationCodeAllowed')}" th:text="${err}"/>
-          </ul>
-          <div class="checkbox-element">
-            <input id="authorizationCodeAllowed" type="checkbox" th:field="*{authorizationCodeAllowed}"/>
-            <label th:for="authorizationCodeAllowed" th:text="#{create.form.authorizationCodeAllowed}"></label>
-          </div>
-          <div class="checkbox-element">
-            <input id="refreshTokenAllowed" type="checkbox" th:field="*{refreshTokenAllowed}"/>
-            <label th:for="refreshTokenAllowed" th:text="#{create.form.refreshTokenAllowed}"></label>
-          </div>
-          <div class="checkbox-element">
-            <input id="implicitGrantAllowed" type="checkbox" th:field="*{implicitGrantAllowed}"/>
-            <label th:for="implicitGrantAllowed" th:text="#{create.form.implicitGrantAllowed}"></label>
-          </div>
-          <div class="checkbox-element">
-            <input id="clientCredentialsAllowed" type="checkbox" th:field="*{clientCredentialsAllowed}"/>
-            <label th:for="clientCredentialsAllowed" th:text="#{create.form.clientCredentialsAllowed}"></label>
-          </div>
-          <div class="buttons">
-            <a href="/" class="c-button">Cancel</a>
-            <input name="create-client" type="submit" class="c-button" value="Save"/>
-          </div>
-        </form>
-      </div>
     </div>
-
-  </div>
 </div>
 </body>
 </html>
