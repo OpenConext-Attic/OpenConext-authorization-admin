@@ -1,6 +1,7 @@
 language: java
 jdk:
   - oraclejdk8
+dist: trusty  
 services:
   - mysql
 before_install:
@@ -8,4 +9,3 @@ before_install:
   - mysql -e "create database IF NOT EXISTS authzserver; grant all on authzserver.* to 'root';" -uroot
 after_success:
   - codecov
-
